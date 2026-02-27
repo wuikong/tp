@@ -15,4 +15,4 @@ by the [SE-EDU initiative](https://se-education.org).<br>
 * It is named `ClientVault`, based on the `AddressBook` project.
   * It enables property agents to quickly access and organize client contact information through a fast, keyboard-centric interface, reducing the effort required to retrieve critical client details during daily client interactions such as property size, bedrooms, how many years left etc. This also helps to link both buyers and sellers easily.
   * It is targeted towards tech-savvy property agents managing their clients’ properties
-* This project is a **part of the se-education.org** initiative. If you would like to contribute code to this project, see [se-education.org](https://se-education.org/#contributing-to-se-edu) for more info.
+* For the detailed documentation of this project, see the **[ClientVault Product Website](https://ay2526s2-cs2103t-w13-1.github.io/tp/)**.
