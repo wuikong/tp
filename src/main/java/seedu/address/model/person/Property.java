@@ -7,13 +7,13 @@ import static java.util.Objects.requireNonNull;
  */
 public class Property {
 
-    private final String owner;
-    private final String address;
+    private final Name owner;
+    private final Address address;
     private final String type;
     private final String price;
     private final String size;
 
-    public Property(String owner, String address, String type, String price, String size) {
+    public Property(Name owner, Address address, String type, String price, String size) {
         requireNonNull(owner);
         requireNonNull(address);
         requireNonNull(type);
@@ -27,11 +27,11 @@ public class Property {
         this.size = size;
     }
 
-    public String getOwner() {
+    public Name getOwner() {
         return owner;
     }
 
-    public String getAddress() {
+    public Address getAddress() {
         return address;
     }
 
