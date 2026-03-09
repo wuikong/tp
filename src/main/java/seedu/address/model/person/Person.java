@@ -39,6 +39,9 @@ public class Person {
         this.property = null;
     }
 
+    /**
+     * Every field must be present and not null, including property.
+     */
     public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags, Property property) {
         requireAllNonNull(name, phone, email, address, tags, property);
         this.name = name;
@@ -48,7 +51,6 @@ public class Person {
         this.tags.addAll(tags);
         this.property = property;
     }
-
 
     public Name getName() {
         return name;
@@ -129,7 +131,6 @@ public class Person {
                 .add("email", email)
                 .add("address", address)
                 .add("tags", tags)
-                .add("property", property)
                 .toString();
     }
 
