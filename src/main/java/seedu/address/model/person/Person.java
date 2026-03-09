@@ -39,6 +39,17 @@ public class Person {
         this.property = null;
     }
 
+    public Person(Name name, Phone phone, Email email, Address address, Set<Tag> tags) {
+        requireAllNonNull(name, phone, email, address, tags, Property property);
+        this.name = name;
+        this.phone = phone;
+        this.email = email;
+        this.address = address;
+        this.tags.addAll(tags);
+        this.property = property;
+    }
+
+
     public Name getName() {
         return name;
     }
@@ -59,10 +70,6 @@ public class Person {
         return property;
     }
 
-    //Temporary Setter
-    public void setProperty(Property property) {
-        this.property = property;
-    }
 
     /**
      * Returns an immutable tag set, which throws {@code UnsupportedOperationException}
