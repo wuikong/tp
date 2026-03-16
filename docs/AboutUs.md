@@ -34,7 +34,7 @@ You can reach us at the email `seer[at]comp.nus.edu.sg`
 
 <img src="images/ongyongyue.png" width="200px">
 
-[[github](http://github.com/ongyongyue)] 
+[[github](http://github.com/ongyongyue)]
 
 * Role: Team Member
 * Responsibilities: Do Stuff

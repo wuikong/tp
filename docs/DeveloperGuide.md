@@ -379,16 +379,16 @@ Goal: Delete a listing
 3. Agent uses the deleteProperty feature with client name, index, address, price and size
 4. System verifies property exists
 5. System confirmation that said property is deleted
-   
+
    Use case ends
 
 **Extension:**
 * 4a. One of the inputs does not match an existing property
   * 4a1. System informs user that specified property does not exist
   * 4a2. Prompts user to try deleting again and give a delete format to follow
-  * 4a3. Steps 4a1 to 4a2 repeats as long as user doesn’t input the valid    
+  * 4a3. Steps 4a1 to 4a2 repeats as long as user doesn’t input the valid
       details of an existing property
-  
+
     Use case ends
 
 ### Non-Functional Requirements

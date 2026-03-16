@@ -41,7 +41,7 @@ public class JsonAdaptedProperty {
     }
 
     /**
-     * Converts this Jackson-friendly adapted property object into the model's {@code Property} object.
+     * Converts this JSON-adapted property object into the model's {@code Property} object.
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted property.
      */
