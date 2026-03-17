@@ -54,8 +54,5 @@ public class PersonCard extends UiPart<Region> {
         person.getTags().stream()
                 .sorted(Comparator.comparing(tag -> tag.tagName))
                 .forEach(tag -> tags.getChildren().add(new Label(tag.tagName)));
-        person.getProperties().stream().findFirst().ifPresentOrElse(
-                firstProperty -> property.setText("Property: " + firstProperty.getAddress()), () -> property.setText("")
-        );
     }
 }

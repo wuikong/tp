@@ -39,7 +39,9 @@ public class ViewPropertyCommand extends Command {
             throw new CommandException(Messages.MESSAGE_INVALID_NO_PROPERTY);
         }
 
+        model.updateFilteredPersonList(p -> p.isSamePerson(personToView));
 
-        return new CommandResult(personToView.propertiesToString());
+        return new CommandResult(
+                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 1));
     }
 }
