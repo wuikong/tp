@@ -3,14 +3,11 @@ package seedu.address.model;
 import static java.util.Objects.requireNonNull;
 
 import java.util.List;
-import java.util.Objects;
 
 import javafx.collections.ObservableList;
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.UniquePersonList;
-import seedu.address.model.property.Property;
-import seedu.address.model.property.UniquePropertyList;
 
 /**
  * Wraps all data at the address-book level
@@ -19,7 +16,6 @@ import seedu.address.model.property.UniquePropertyList;
 public class AddressBook implements ReadOnlyAddressBook {
 
     private final UniquePersonList persons;
-    private final UniquePropertyList properties;
 
     /*
      * The 'unusual' code block below is a non-static initialization block, sometimes used to avoid duplication
@@ -30,7 +26,6 @@ public class AddressBook implements ReadOnlyAddressBook {
      */
     {
         persons = new UniquePersonList();
-        properties = new UniquePropertyList();
     }
 
     public AddressBook() {}
@@ -54,21 +49,12 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     /**
-     * Replaces the contents of the property list with {@code properties}.
-     * {@code properties} must not contain duplicate properties.
-     */
-    public void setProperties(List<Property> properties) {
-        this.properties.setProperties(properties);
-    }
-
-    /**
      * Resets the existing data of this {@code AddressBook} with {@code newData}.
      */
     public void resetData(ReadOnlyAddressBook newData) {
         requireNonNull(newData);
 
         setPersons(newData.getPersonList());
-        setProperties(newData.getPropertyList());
     }
 
     //// person-level operations
@@ -108,42 +94,6 @@ public class AddressBook implements ReadOnlyAddressBook {
         persons.remove(key);
     }
 
-    //// property-level operations
-
-    /**
-     * Returns true if a property with the same identity as {@code property} exists in the address book.
-     */
-    public boolean hasProperty(Property property) {
-        requireNonNull(property);
-        return properties.contains(property);
-    }
-
-    /**
-     * Adds a property to the address book.
-     * The property must not already exist in the address book.
-     */
-    public void addProperty(Property p) {
-        properties.add(p);
-    }
-
-    /**
-     * Replaces the given property {@code target} in the list with {@code editedProperty}.
-     * {@code target} must exist in the address book.
-     */
-    public void setProperty(Property target, Property editedProperty) {
-        requireNonNull(editedProperty);
-
-        properties.setProperty(target, editedProperty);
-    }
-
-    /**
-     * Removes {@code key} from this {@code AddressBook}.
-     * {@code key} must exist in the address book.
-     */
-    public void removeProperty(Property key) {
-        properties.remove(key);
-    }
-
     //// util methods
 
     @Override
@@ -159,11 +109,6 @@ public class AddressBook implements ReadOnlyAddressBook {
     }
 
     @Override
-    public ObservableList<Property> getPropertyList() {
-        return properties.asUnmodifiableObservableList();
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -175,12 +120,11 @@ public class AddressBook implements ReadOnlyAddressBook {
         }
 
         AddressBook otherAddressBook = (AddressBook) other;
-        return persons.equals(otherAddressBook.persons)
-                && properties.equals(otherAddressBook.properties);
+        return persons.equals(otherAddressBook.persons);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(persons, properties);
+        return persons.hashCode();
     }
 }

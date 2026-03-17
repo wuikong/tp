@@ -12,7 +12,6 @@ import javafx.collections.transformation.FilteredList;
 import seedu.address.commons.core.GuiSettings;
 import seedu.address.commons.core.LogsCenter;
 import seedu.address.model.person.Person;
-import seedu.address.model.property.Property;
 
 /**
  * Represents the in-memory model of the address book data.
@@ -23,7 +22,6 @@ public class ModelManager implements Model {
     private final AddressBook addressBook;
     private final UserPrefs userPrefs;
     private final FilteredList<Person> filteredPersons;
-    private final FilteredList<Property> filteredProperties;
 
     /**
      * Initializes a ModelManager with the given addressBook and userPrefs.
@@ -36,7 +34,6 @@ public class ModelManager implements Model {
         this.addressBook = new AddressBook(addressBook);
         this.userPrefs = new UserPrefs(userPrefs);
         filteredPersons = new FilteredList<>(this.addressBook.getPersonList());
-        filteredProperties = new FilteredList<>(this.addressBook.getPropertyList());
     }
 
     public ModelManager() {
@@ -114,29 +111,6 @@ public class ModelManager implements Model {
         addressBook.setPerson(target, editedPerson);
     }
 
-    @Override
-    public boolean hasProperty(Property property) {
-        requireNonNull(property);
-        return addressBook.hasProperty(property);
-    }
-
-    @Override
-    public void deleteProperty(Property target) {
-        addressBook.removeProperty(target);
-    }
-
-    @Override
-    public void addProperty(Property property) {
-        addressBook.addProperty(property);
-    }
-
-    @Override
-    public void setProperty(Property target, Property editedProperty) {
-        requireAllNonNull(target, editedProperty);
-
-        addressBook.setProperty(target, editedProperty);
-    }
-
     //=========== Filtered Person List Accessors =============================================================
 
     /**
@@ -155,11 +129,6 @@ public class ModelManager implements Model {
     }
 
     @Override
-    public ObservableList<Property> getFilteredPropertyList() {
-        return filteredProperties;
-    }
-
-    @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
@@ -173,8 +142,7 @@ public class ModelManager implements Model {
         ModelManager otherModelManager = (ModelManager) other;
         return addressBook.equals(otherModelManager.addressBook)
                 && userPrefs.equals(otherModelManager.userPrefs)
-                && filteredPersons.equals(otherModelManager.filteredPersons)
-                && filteredProperties.equals(otherModelManager.filteredProperties);
+                && filteredPersons.equals(otherModelManager.filteredPersons);
     }
 
 }
