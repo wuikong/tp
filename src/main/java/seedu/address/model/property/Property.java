@@ -11,6 +11,7 @@ public class Property {
     private final PropertyAddress address;
     private final Price price;
     private final Size size;
+    private String remarks;
 
     /**
      * Constructs a {@code Property}.
@@ -40,6 +41,23 @@ public class Property {
         return size;
     }
 
+    public String getRemarks() {
+        return this.remarks;
+    }
+
+    public void setRemarks(String remarks) {
+        this.remarks = remarks;
+    }
+
+    /**
+     * Creates a copy of the property with updated remarks.
+     */
+    public Property withRemarks(String remarks) {
+        Property updated = new Property(this.address, this.price, this.size);
+        updated.setRemarks(remarks);
+        return updated;
+    }
+
     /**
      * Returns true if both properties have the same address.
      */
@@ -54,7 +72,7 @@ public class Property {
 
     @Override
     public String toString() {
-        return "Address: " + address + ", Price: " + price + ", Size: " + size;
+        return "Address: " + address + ", Price: " + price + ", Size: " + size + ", Remarks: " + remarks;
     }
 
     @Override

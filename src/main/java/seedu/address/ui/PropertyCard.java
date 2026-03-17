@@ -2,6 +2,7 @@ package seedu.address.ui;
 
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Region;
 import seedu.address.model.property.Property;
@@ -25,6 +26,10 @@ public class PropertyCard extends UiPart<Region> {
     private Label price;
     @FXML
     private Label size;
+    @FXML
+    private FlowPane tags;
+    @FXML
+    private Label remarks;
 
     /**
      * Creates a {@code PropertyCard} with the given {@code Property} and index to display.
@@ -36,5 +41,13 @@ public class PropertyCard extends UiPart<Region> {
         propertyAddress.setText(property.getAddress().toString());
         price.setText("Price: $" + property.getPrice());
         size.setText("Size: " + property.getSize() + " sqft");
+
+        String propertyRemarks = property.getRemarks();
+        if (propertyRemarks != null && !propertyRemarks.isBlank()) {
+            remarks.setText("Remarks: " + propertyRemarks);
+        } else {
+            remarks.setVisible(false);
+            remarks.setManaged(false);
+        }
     }
 }

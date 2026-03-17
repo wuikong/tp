@@ -18,6 +18,7 @@ public class JsonAdaptedProperty {
     private final String address;
     private final String price;
     private final String size;
+    private final String remarks;
 
     /**
      * Constructs a {@code JsonAdaptedProperty} with the given property details.
@@ -25,10 +26,12 @@ public class JsonAdaptedProperty {
     @JsonCreator
     public JsonAdaptedProperty(@JsonProperty("address") String address,
                                @JsonProperty("price") String price,
-                               @JsonProperty("size") String size) {
+                               @JsonProperty("size") String size,
+                               @JsonProperty("remarks") String remarks) {
         this.address = address;
         this.price = price;
         this.size = size;
+        this.remarks = remarks;
     }
 
     /**
@@ -38,6 +41,7 @@ public class JsonAdaptedProperty {
         address = source.getAddress().value;
         price = source.getPrice().value;
         size = source.getSize().value;
+        remarks = source.getRemarks();
     }
 
     /**
@@ -73,6 +77,10 @@ public class JsonAdaptedProperty {
         }
         final Size modelSize = new Size(size);
 
-        return new Property(modelAddress, modelPrice, modelSize);
+        Property property = new Property(modelAddress, modelPrice, modelSize);
+        if (remarks != null) {
+            property.setRemarks(remarks);
+        }
+        return property;
     }
 }

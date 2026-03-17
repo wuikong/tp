@@ -19,6 +19,8 @@ public class Messages {
     public static final String MESSAGE_DUPLICATE_FIELDS =
                 "Multiple values specified for the following single-valued field(s): ";
     public static final String MESSAGE_INVALID_NO_PROPERTY = "Listed Person has no property";
+    public static final String MESSAGE_INVALID_PROPERTY_DISPLAYED_INDEX = "Invalid Property Index!";
+
     /**
      * Returns an error message indicating the duplicate prefixes.
      */
