@@ -80,6 +80,41 @@ public class AddPropertyCommandTest {
     }
 
     @Test
+    public void execute_samePropertyToDifferentPersons_success() throws CommandException {
+        Model testModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        AddPropertyCommand addCommand1 = new AddPropertyCommand(INDEX_FIRST_PERSON, validProperty);
+        AddPropertyCommand addCommand2 = new AddPropertyCommand(
+                Index.fromOneBased(2), validProperty);
+
+        Person personToEdit1 = testModel.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person editedPerson1 = personToEdit1.addProperty(validProperty);
+
+        String expectedMessage1 = String.format(
+                AddPropertyCommand.MESSAGE_SUCCESS,
+                personToEdit1.getName(),
+                validProperty
+        );
+
+        Model expectedModel1 = new ModelManager(testModel.getAddressBook(), new UserPrefs());
+        expectedModel1.setPerson(personToEdit1, editedPerson1);
+
+        assertCommandSuccess(addCommand1, testModel, expectedMessage1, expectedModel1);
+
+        // Now execute the second command on the updated model
+        Person personToEdit2 = testModel.getFilteredPersonList().get(1);
+
+        String expectedMessage2 = String.format(
+                AddPropertyCommand.MESSAGE_SUCCESS,
+                personToEdit2.getName(),
+                validProperty
+        );
+
+        CommandResult result = addCommand2.execute(testModel);
+        assertEquals(expectedMessage2, result.getFeedbackToUser());
+    }
+
+    @Test
     public void execute_noPersons_throwsCommandException() {
         Model emptyModel = new ModelManager();
 
