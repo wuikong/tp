@@ -5,6 +5,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_LISTING_INDEX;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
 import java.util.List;
 
@@ -19,6 +20,7 @@ import seedu.address.model.property.Property;
  * Adds a property to an existing person in the address book.
  */
 public class AddPropertyCommand extends Command {
+
     public static final String COMMAND_WORD = "addProperty";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a property to the person identified "
@@ -27,12 +29,14 @@ public class AddPropertyCommand extends Command {
             + PREFIX_LISTING_INDEX + "CLIENT_INDEX "
             + PREFIX_ADDRESS + "ADDRESS "
             + PREFIX_PRICE + "PRICE "
-            + PREFIX_SIZE + "SIZE\n"
+            + PREFIX_SIZE + "SIZE "
+            + "[" + PREFIX_TYPE + "TYPE]\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_LISTING_INDEX + "1 "
             + PREFIX_ADDRESS + "311 Clementi Ave 2, #02-25 "
             + PREFIX_PRICE + "1200000 "
-            + PREFIX_SIZE + "1200";
+            + PREFIX_SIZE + "1200 "
+            + PREFIX_TYPE + "HDB";
 
     public static final String MESSAGE_SUCCESS = "New property added to person: %1$s\n%2$s";
     public static final String MESSAGE_DUPLICATE_PROPERTY = "This person already has this property.";
@@ -44,6 +48,9 @@ public class AddPropertyCommand extends Command {
     /**
      * Creates an AddPropertyCommand to add the specified {@code Property}
      * to the person at the specified {@code Index}.
+     *
+     * @param targetIndex The index of the person to add the property to.
+     * @param property The property to add.
      */
     public AddPropertyCommand(Index targetIndex, Property property) {
         requireNonNull(targetIndex);
@@ -52,6 +59,13 @@ public class AddPropertyCommand extends Command {
         this.property = property;
     }
 
+    /**
+     * Executes the command and adds the property to the specified person.
+     *
+     * @param model The model to execute the command on.
+     * @return The result of the command execution.
+     * @throws CommandException If the index is invalid or the property already exists.
+     */
     @Override
     public CommandResult execute(Model model) throws CommandException {
         requireNonNull(model);
@@ -78,16 +92,19 @@ public class AddPropertyCommand extends Command {
         return new CommandResult(String.format(MESSAGE_SUCCESS, personToEdit.getName(), property));
     }
 
+    /**
+     * Returns true if both commands have the same target index and property.
+     *
+     * @param other The other object to compare against.
+     */
     @Override
     public boolean equals(Object other) {
         if (other == this) {
             return true;
         }
-
         if (!(other instanceof AddPropertyCommand)) {
             return false;
         }
-
         AddPropertyCommand otherAddPropertyCommand = (AddPropertyCommand) other;
         return targetIndex.equals(otherAddPropertyCommand.targetIndex)
                 && property.equals(otherAddPropertyCommand.property);

@@ -14,6 +14,7 @@ public class PropertyCard extends UiPart<Region> {
 
     private static final String FXML = "PropertyCard.fxml";
 
+    /** The property displayed by this card. */
     public final Property property;
 
     @FXML
@@ -33,6 +34,9 @@ public class PropertyCard extends UiPart<Region> {
 
     /**
      * Creates a {@code PropertyCard} with the given {@code Property} and index to display.
+     *
+     * @param property The property to display.
+     * @param displayedIndex The index to show on the card.
      */
     public PropertyCard(Property property, int displayedIndex) {
         super(FXML);
@@ -41,6 +45,12 @@ public class PropertyCard extends UiPart<Region> {
         propertyAddress.setText(property.getAddress().toString());
         price.setText("Price: $" + property.getPrice());
         size.setText("Size: " + property.getSize() + " sqft");
+
+        if (property.getPropertyType() != null) {
+            Label typeLabel = new Label(property.getPropertyType().value);
+            typeLabel.getStyleClass().add("label");
+            tags.getChildren().add(typeLabel);
+        }
 
         String propertyRemarks = property.getRemarks();
         if (propertyRemarks != null && !propertyRemarks.isBlank()) {

@@ -94,6 +94,14 @@ public class PersonBuilder {
         return this;
     }
 
+    /**
+     * Sets the {@code properties} of the {@code Person} that we are building.
+     */
+    public PersonBuilder withProperties(Set<Property> properties) {
+        this.properties = new LinkedHashSet<>(properties);
+        return this;
+    }
+
     public Person build() {
         return new Person(name, phone, email, tags, properties);
     }

@@ -7,45 +7,59 @@ import seedu.address.commons.exceptions.IllegalValueException;
 import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 
 /**
  * Jackson-friendly version of {@link Property}.
  */
 public class JsonAdaptedProperty {
+
     public static final String MISSING_FIELD_MESSAGE_FORMAT = "Property's %s field is missing!";
 
     private final String address;
     private final String price;
     private final String size;
     private final String remarks;
+    private final String propertyType;
 
     /**
      * Constructs a {@code JsonAdaptedProperty} with the given property details.
+     *
+     * @param address The property address string.
+     * @param price The property price string.
+     * @param size The property size string.
+     * @param remarks The property remarks string, may be null.
+     * @param propertyType The property type string, may be null.
      */
     @JsonCreator
     public JsonAdaptedProperty(@JsonProperty("address") String address,
                                @JsonProperty("price") String price,
                                @JsonProperty("size") String size,
-                               @JsonProperty("remarks") String remarks) {
+                               @JsonProperty("remarks") String remarks,
+                               @JsonProperty("propertyType") String propertyType) {
         this.address = address;
         this.price = price;
         this.size = size;
         this.remarks = remarks;
+        this.propertyType = propertyType;
     }
 
     /**
      * Converts a given {@code Property} into this class for Jackson use.
+     *
+     * @param source The property to convert.
      */
     public JsonAdaptedProperty(Property source) {
         address = source.getAddress().value;
         price = source.getPrice().value;
         size = source.getSize().value;
         remarks = source.getRemarks();
+        propertyType = source.getPropertyType() != null ? source.getPropertyType().value : null;
     }
 
     /**
-     * Converts this JSON-adapted property object into the model's {@code Property} object.
+     * Converts this Jackson-friendly adapted property object into the model's {@code Property} object.
      *
      * @throws IllegalValueException if there were any data constraints violated in the adapted property.
      */
@@ -77,7 +91,15 @@ public class JsonAdaptedProperty {
         }
         final Size modelSize = new Size(size);
 
-        Property property = new Property(modelAddress, modelPrice, modelSize);
+        PropertyType modelPropertyType = null;
+        if (propertyType != null) {
+            if (!PropertyType.isValidPropertyType(propertyType)) {
+                throw new IllegalValueException(PropertyType.MESSAGE_CONSTRAINTS);
+            }
+            modelPropertyType = new PropertyType(propertyType);
+        }
+
+        Property property = new Property(modelAddress, modelPrice, modelSize, modelPropertyType);
         if (remarks != null) {
             property.setRemarks(remarks);
         }
