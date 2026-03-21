@@ -91,6 +91,33 @@ Examples:
 * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01`
 * `add n/Betsy Crowe t/friend e/betsycrowe@example.com a/Newgate Prison p/1234567 t/criminal`
 
+### Adding a property: `addProperty`
+
+Adds a property to the client identified by the index number in the displayed client list.
+
+Format: `addProperty li/INDEX a/ADDRESS p/PRICE s/SIZE`
+
+<box type="tip" seamless>
+
+**Tip:** Use the `list` command to view the indices of clients before adding a property.
+**Tip:** The `type/TYPE` field is optional.
+
+Examples:
+* `addProperty l/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+* `addProperty l/2 a/10 Orchard Road pr/2500000 s/1800`
+
+</box>
+
+Examples:
+* `addProperty l/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+* `addProperty l/2 a/10 Orchard Road pr/2500000 s/1800`
+
+<box type="warning" seamless>
+
+**Warning:** Each client can only have a maximum of **one HDB property**.
+
+</box>
+
 ### Listing all persons : `list`
 
 Shows a list of all persons in the address book.
