@@ -172,7 +172,6 @@ Examples:
 * `editProperty 2 i/1 pr/850000`
 * `editProperty 3 i/2 s/1400`
 
-
 ### Filtering clients by name: `filterClient`
 
 Finds clients whose names contain any of the given keywords.
@@ -191,6 +190,24 @@ Examples:
 * `filterClient n/John` returns `john` and `John Doe`
 * `filterClient n/alex david` returns `Alex Yeoh`, `David Li`<br>
   ![result for 'filterClient n/alex david'](images/findAlexDavidResult.png)
+
+### Filtering properties by address: `filterProperty`
+
+Finds properties whose addresses contain any of the given keywords.
+
+Format: `filterProperty a/KEYWORD [MORE_KEYWORDS]`
+
+* The search is case-insensitive. e.g `jurong` will match `Jurong`
+* The order of the keywords does not matter. e.g. `Buona Vista` will match `Vista Buona`
+* Only the address is searched.
+* Only full words will be matched e.g. `Woodland` will not match `Woodlands`
+* Properties matching at least one keyword will be returned (i.e. `OR` search).
+  e.g. `View Street` will return `Clementi Street 3`, `East View`
+* The client list will show all clients that own any of the matched properties.
+
+Examples:
+* `filterProperty a/Bukit` returns `Bukit Timah` and `Bukit Panjang`
+* `filterProperty a/punggol changi` returns `Punggol Central`, `Changi South`
 
 ### Deleting a client : `deleteClient`
 
@@ -256,12 +273,13 @@ _Details coming soon ..._
 
 ## Command summary
 
-Action            | Format, Examples
-------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**           | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Clear**         | `clear`
-**Delete Client** | `deleteClient INDEX`<br> e.g., `deleteClient 3`
-**Edit**          | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
-**Filter Client** | `filterClient n/KEYWORD [MORE_KEYWORDS]`<br> e.g., `filterClient n/James Jake`
-**List**          | `list`
-**Help**          | `help`
+Action              | Format, Examples
+--------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
+**Add**             | `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho p/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
+**Clear**           | `clear`
+**Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`
+**Edit**            | `edit INDEX [n/NAME] [p/PHONE_NUMBER] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`<br> e.g.,`edit 2 n/James Lee e/jameslee@example.com`
+**Filter Client**   | `filterClient n/KEYWORD [MORE_KEYWORDS]`<br> e.g., `filterClient n/James Jake`
+**Filter Property** | `filterProperty a/KEYWORD [MORE_KEYWORDS]`<br> e.g., `filterProperty a/Clementi Dover`
+**List**            | `list`
+**Help**            | `help`
