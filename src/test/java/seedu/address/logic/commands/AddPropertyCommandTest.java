@@ -8,6 +8,7 @@ import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
 import static seedu.address.testutil.Assert.assertThrows;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
+import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.List;
@@ -130,6 +131,7 @@ public class AddPropertyCommandTest {
         assertFalse(firstCommand.equals(null));
         assertFalse(firstCommand.equals(1));
         assertFalse(firstCommand.equals(secondCommand));
+        assertFalse(firstCommand.equals(new AddPropertyCommand(List.of(INDEX_SECOND_PERSON), validProperty)));
     }
 
     @Test
