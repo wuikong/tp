@@ -42,7 +42,8 @@ public class AddPropertyCommandTest {
 
     @Test
     public void constructor_nullProperty_throwsNullPointerException() {
-        assertThrows(NullPointerException.class, () -> new AddPropertyCommand(List.of(INDEX_FIRST_PERSON), null));
+        assertThrows(NullPointerException.class, () -> new AddPropertyCommand(
+                List.of(INDEX_FIRST_PERSON), null));
     }
 
     @Test
