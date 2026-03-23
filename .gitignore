@@ -10,6 +10,7 @@ src/main/resources/docs/
 /.vscode/
 
 # Storage/log files
+/bin/
 /data/
 /config.json
 /preferences.json
