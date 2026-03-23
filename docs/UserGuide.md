@@ -76,15 +76,16 @@ Shows a message explaining how to access the help page.
 Format: `help`
 
 
-### Adding a person: `add`
+### Adding a person: `addClient`
 
 Adds a person to the address book.
 
-Format: `add n/NAME p/PHONE_NUMBER e/EMAIL a/ADDRESS [t/TAG]…​`
+Format: `add n/NAME p/PHONE_NUMBER e/EMAIL [t/TAG]…​`
 
 <box type="tip" seamless>
 
-**Tip:** A person can have any number of tags (including 0)
+**Tip:** 
+- A person can have any number of tags (including 0)
 </box>
 
 Examples:
@@ -109,29 +110,36 @@ Examples:
 * `addProperty l/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
 * `addProperty l/2 a/10 Orchard Road pr/2500000 s/1800`
 
-
 ### Listing all clients and their properties : `list`
 
 Shows a list of all clients and their properties in the address book.
 
 Format: `list`
 
-### Editing a person : `edit`
+### Viewing a client's details: `viewClient`
 
-Edits an existing person in the address book.
+Shows the client's information and properties owned by client by index.
 
-Format: `edit INDEX [n/NAME] [p/PHONE] [e/EMAIL] [a/ADDRESS] [t/TAG]…​`
+Format: `viewClient INDEX`
 
-* Edits the person at the specified `INDEX`. The index refers to the index number shown in the displayed person list. The index **must be a positive integer** 1, 2, 3, …​
-* At least one of the optional fields must be provided.
-* Existing values will be updated to the input values.
-* When editing tags, the existing tags of the person will be removed i.e adding of tags is not cumulative.
-* You can remove all the person’s tags by typing `t/` without
-    specifying any tags after it.
+* Narrows to the person at the specified `INDEX`. 
+* The index refers to the index number shown in the displayed list on the client tab. 
+* The index **must be a positive integer** 1, 2, 3, …​
 
 Examples:
-*  `edit 1 p/91234567 e/johndoe@example.com` Edits the phone number and email address of the 1st person to be `91234567` and `johndoe@example.com` respectively.
-*  `edit 2 n/Betsy Crower t/` Edits the name of the 2nd person to be `Betsy Crower` and clears all existing tags.
+*  `viewClient 1`
+
+### Viewing a client's details: `viewProperty`
+
+Shows the Property's information and all it's owners by index.
+
+Format: `viewProperty INDEX`
+
+* Narrows to the property at the specified `INDEX`. The index refers to the index number shown in the displayed list on the property tab.
+* The index **must be a positive integer** 1, 2, 3, …​
+
+Examples:
+*  `viewProperty 1`
 
 ### Editing a client: `editClient`
 
