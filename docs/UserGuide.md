@@ -31,7 +31,7 @@ ClientVault is a **desktop app for managing clients and properties, optimized fo
 
    * `list` : Lists all contacts.
 
-   * `add n/John Doe p/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
+   * `add n/John Doe c/98765432 e/johnd@example.com a/John street, block 123, #01-01` : Adds a contact named `John Doe` to the Address Book.
 
    * `deleteClient 3` : Deletes the 3rd client shown in the current client list.
 
@@ -59,7 +59,7 @@ ClientVault is a **desktop app for managing clients and properties, optimized fo
   e.g. `[t/TAG]…​` can be used as ` ` (i.e. 0 times), `t/friend`, `t/friend t/family` etc.
 
 * Parameters can be in any order.<br>
-  e.g. if the command specifies `n/NAME p/CONTACT`, `c/CONTACT n/NAME` is also acceptable.
+  e.g. if the command specifies `n/NAME c/CONTACT`, `c/CONTACT n/NAME` is also acceptable.
 
 * Extraneous parameters for commands that do not take in parameters (such as `help`, `list`, `exit` and `clear`) will be ignored.<br>
   e.g. if the command specifies `help 123`, it will be interpreted as `help`.
