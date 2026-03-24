@@ -94,21 +94,23 @@ Examples:
 
 ### Adding a property: `addProperty`
 
-Adds a property to the client identified by the index number in the displayed client list.
+Adds a property to one or more clients identified by the indices in the displayed client list.
 
-Format: `addProperty li/INDEX a/ADDRESS p/PRICE s/SIZE`
+Format: `addProperty i/INDEX [i/MORE_INDEX]... a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
 
 <box type="tip" seamless>
 
 **Tip:**
 - Use the `list` command to view the indices of clients before adding a property.
+- You can specify multiple `i/` prefixes to assign the same property to multiple clients.
 - The `type/TYPE` field is optional.
 
 </box>
 
 Examples:
-* `addProperty l/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
-* `addProperty l/2 a/10 Orchard Road pr/2500000 s/1800`
+* `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+* `addProperty i/1 i/2 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+* `addProperty i/2 a/10 Orchard Road pr/2500000 s/1800`
 
 ### Listing all clients and their properties : `list`
 
@@ -312,10 +314,11 @@ _Details coming soon ..._
 
 ## Command summary
 
+
 Action              | Format, Examples
 --------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add**             | `add n/NAME c/CONTACT e/EMAIL a/ADDRESS [t/TAG]…​` <br> e.g., `add n/James Ho c/22224444 e/jamesho@example.com a/123, Clementi Rd, 1234665 t/friend t/colleague`
-**Add Property**    | `addProperty li/INDEX a/ADDRESS p/PRICE s/SIZE [type/TYPE]` <br> e.g., `addProperty l/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+**Add Client**      | `addClient n/NAME c/CONTACT e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho c/22224444 e/jamesho@example.com t/friend t/colleague`
+**Add Property**    | `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]` <br> e.g., `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
 **Clear**           | `clear`
 **Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`
 **Delete Property** | `deleteProperty INDEX`<br> e.g., `deleteProperty 3`

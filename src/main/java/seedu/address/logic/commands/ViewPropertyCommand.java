@@ -6,10 +6,10 @@ import seedu.address.commons.core.index.Index;
 import seedu.address.logic.Messages;
 import seedu.address.logic.commands.exceptions.CommandException;
 import seedu.address.model.Model;
-import seedu.address.model.person.Person;
+import seedu.address.model.property.Property;
 
 /**
- * Displays the property information of a person.
+ * Displays properties matching the selected property and the clients who own them.
  */
 public class ViewPropertyCommand extends Command {
 
@@ -18,7 +18,7 @@ public class ViewPropertyCommand extends Command {
     private final Index index;
 
     /**
-     * Creates a ViewPropertyCommand to view the property of the specified person.
+     * Creates a ViewPropertyCommand to view the information of the specified property.
      */
     public ViewPropertyCommand(Index index) {
         this.index = index;
@@ -26,23 +26,35 @@ public class ViewPropertyCommand extends Command {
 
     @Override
     public CommandResult execute(Model model) throws CommandException {
+        List<Property> lastShownPropertyList = model.getFilteredPropertyList();
 
-        List<Person> lastShownList = model.getFilteredPersonList();
-
-        if (index.getZeroBased() >= lastShownList.size()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX);
+        if (index.getZeroBased() >= lastShownPropertyList.size()) {
+            throw new CommandException(Messages.MESSAGE_INVALID_PROPERTY_DISPLAYED_INDEX);
         }
 
-        Person personToView = lastShownList.get(index.getZeroBased());
+        Property propertyToView = lastShownPropertyList.get(index.getZeroBased());
 
-        if (personToView.getProperties().isEmpty()) {
-            throw new CommandException(Messages.MESSAGE_INVALID_NO_PROPERTY);
-        }
-
-        model.updateFilteredPersonList(p -> p.isSamePerson(personToView));
-        model.updateFilteredPropertyList(p -> personToView.getProperties().contains(p));
+        model.updateFilteredPropertyList(property -> property.isSameProperty(propertyToView));
+        model.updateFilteredPersonList(person -> person.getProperties().stream()
+                .anyMatch(personProperty -> model.getFilteredPropertyList().stream()
+                        .anyMatch(filteredProperty -> filteredProperty.isSameProperty(personProperty))));
 
         return new CommandResult(
-                String.format(Messages.MESSAGE_PROPERTIES_LISTED_OVERVIEW, model.getFilteredPropertyList().size()));
+                String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, model.getFilteredPersonList().size()));
+    }
+
+    @Override
+    public boolean equals(Object other) {
+        if (other == this) {
+            return true;
+        }
+
+        // instanceof handles nulls
+        if (!(other instanceof ViewPropertyCommand)) {
+            return false;
+        }
+
+        ViewPropertyCommand otherViewPropertyCommand = (ViewPropertyCommand) other;
+        return index.equals(otherViewPropertyCommand.index);
     }
 }

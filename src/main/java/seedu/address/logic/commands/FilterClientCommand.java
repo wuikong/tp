@@ -46,8 +46,8 @@ public class FilterClientCommand extends Command {
             return false;
         }
 
-        FilterClientCommand otherViewClientCommand = (FilterClientCommand) other;
-        return predicate.equals(otherViewClientCommand.predicate);
+        FilterClientCommand otherFilterClientCommand = (FilterClientCommand) other;
+        return predicate.equals(otherFilterClientCommand.predicate);
     }
 
     @Override

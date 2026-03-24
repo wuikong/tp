@@ -4,8 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.commons.util.CollectionUtil.requireAllNonNull;
 
 import java.nio.file.Path;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.LinkedHashSet;
 import java.util.function.Predicate;
 import java.util.logging.Logger;
 
@@ -154,7 +153,7 @@ public class ModelManager implements Model {
      * Rebuilds the flattened property list from all persons in the address book.
      */
     private void refreshProperties() {
-        List<Property> aggregatedProperties = new ArrayList<>();
+        LinkedHashSet<Property> aggregatedProperties = new LinkedHashSet<>();
         for (Person person : addressBook.getPersonList()) {
             aggregatedProperties.addAll(person.getProperties());
         }
