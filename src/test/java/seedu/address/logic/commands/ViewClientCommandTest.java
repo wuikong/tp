@@ -76,7 +76,7 @@ public class ViewClientCommandTest {
     }
 
     @Test
-    public void execute_viewSecondClient_propertyPredicateEvaluatesTrueAndFalse_success() throws Exception {
+    public void execute_onlyTargetClientsPropertyFiltered_success() throws Exception {
         Property aliceOnlyProperty = new Property(
                 new PropertyAddress("10 Alpha Street"),
                 new Price("500000"),
