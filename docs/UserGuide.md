@@ -71,7 +71,6 @@ ClientVault is a **desktop app for managing clients and properties, optimized fo
 
 Shows a message explaining how to access the help page.
 
-![help message](images/helpMessage.png)
 
 Format: `help`
 
