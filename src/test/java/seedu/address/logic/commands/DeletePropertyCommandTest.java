@@ -43,7 +43,7 @@ public class DeletePropertyCommandTest {
         // Add a property to test
         Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
                 new Price("1200000"), new Size("1200"));
-        AddPropertyCommand addPropertyCommand = new AddPropertyCommand(List.of(TypicalIndexes.INDEX_FIRST_PERSON),
+        AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                 testProperty);
         addPropertyCommand.execute(model);
 
@@ -67,7 +67,7 @@ public class DeletePropertyCommandTest {
         Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
                 new Price("1200000"), new Size("1200"));
         try {
-            AddPropertyCommand addPropertyCommand = new AddPropertyCommand(List.of(TypicalIndexes.INDEX_FIRST_PERSON),
+            AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                     testProperty);
             addPropertyCommand.execute(model);
         } catch (CommandException e) {
@@ -96,11 +96,11 @@ public class DeletePropertyCommandTest {
         Property property2 = new Property(new PropertyAddress("412 Clementi Ave 3, #03-25"),
                 new Price("1500000"), new Size("1500"));
 
-        AddPropertyCommand addPropertyCommand1 = new AddPropertyCommand(List.of(TypicalIndexes.INDEX_FIRST_PERSON),
+        AddPropertyCommand addPropertyCommand1 = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                 property1);
         addPropertyCommand1.execute(model);
 
-        AddPropertyCommand addPropertyCommand2 = new AddPropertyCommand(List.of(TypicalIndexes.INDEX_SECOND_PERSON),
+        AddPropertyCommand addPropertyCommand2 = new AddPropertyCommand(TypicalIndexes.INDEX_SECOND_PERSON,
                 property2);
         addPropertyCommand2.execute(model);
 
