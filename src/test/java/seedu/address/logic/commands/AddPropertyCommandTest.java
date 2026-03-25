@@ -33,6 +33,12 @@ public class AddPropertyCommandTest {
             new Size("1200")
     );
 
+    private final Property anotherValidProperty = new Property(
+            new PropertyAddress("123 Clementi Ave 3"),
+            new Price("1000000"),
+            new Size("1200")
+    );
+
     @Test
     public void constructor_nullIndex_throwsNullPointerException() {
         assertThrows(NullPointerException.class, () -> new AddPropertyCommand(null, validProperty));
@@ -79,6 +85,28 @@ public class AddPropertyCommandTest {
         AddPropertyCommand duplicateCommand = new AddPropertyCommand(INDEX_FIRST_PERSON, validProperty);
 
         assertCommandFailure(duplicateCommand, model, AddPropertyCommand.MESSAGE_DUPLICATE_PROPERTY);
+    }
+
+    @Test
+    public void execute_propertyAlreadyOwnedByAnotherClient_throwsCommandException() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedFirstPerson = firstPerson.addProperty(anotherValidProperty);
+        model.setPerson(firstPerson, updatedFirstPerson);
+
+        AddPropertyCommand command = new AddPropertyCommand(INDEX_SECOND_PERSON, anotherValidProperty);
+
+        assertCommandFailure(command, model, AddPropertyCommand.MESSAGE_PROPERTY_ALREADY_OWNED);
+    }
+
+    @Test
+    public void execute_duplicatePropertySameClient_failure() {
+        Person firstPerson = model.getFilteredPersonList().get(INDEX_FIRST_PERSON.getZeroBased());
+        Person updatedFirstPerson = firstPerson.addProperty(anotherValidProperty);
+        model.setPerson(firstPerson, updatedFirstPerson);
+
+        AddPropertyCommand command = new AddPropertyCommand(INDEX_FIRST_PERSON, anotherValidProperty);
+
+        assertCommandFailure(command, model, AddPropertyCommand.MESSAGE_DUPLICATE_PROPERTY);
     }
 
     @Test
