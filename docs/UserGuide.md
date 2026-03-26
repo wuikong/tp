@@ -82,24 +82,31 @@ Examples:
 ### Adding a property: `addProperty`
 
 ![addProperty](images/addProperty.png)
-Adds a property to one or more clients identified by the indices in the displayed client list.
+Adds a property to the client identified by the index number in the displayed client list.
 
-Format: `addProperty i/INDEX [i/MORE_INDEX]... a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
+Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
 
 <box type="tip" seamless>
 
 **Tip:**
 
 - Use the `list` command to view the indices of clients before adding a property.
-- You can specify multiple `i/` prefixes to assign the same property to multiple clients.
+- Each property can only belong to one client.
 - The `type/TYPE` field is optional.
+
+</box>
+
+<box type="warning" seamless>
+**Warning:**
+
+- A property cannot be assigned to multiple clients.
+- Attempting to add a property that is already owned by another client will result in an error.
 
 </box>
 
 Examples:
 
 * `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
-* `addProperty i/1 i/2 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
 * `addProperty i/2 a/10 Orchard Road pr/2500000 s/1800`
 
 ### Listing all clients and their properties : `list`

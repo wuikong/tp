@@ -7,9 +7,7 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
-import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.ToStringBuilder;
@@ -25,11 +23,10 @@ public class AddPropertyCommand extends Command {
 
     public static final String COMMAND_WORD = "addProperty";
 
-    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a property to the person identified "
+    public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a property to the client identified "
             + "by the index number used in the displayed person list. "
             + "Parameters: "
             + PREFIX_LISTING_INDEX + "CLIENT_INDEX "
-            + "[" + PREFIX_LISTING_INDEX + "MORE_CLIENT_INDEX]... "
             + PREFIX_ADDRESS + "ADDRESS "
             + PREFIX_PRICE + "PRICE "
             + PREFIX_SIZE + "SIZE "
@@ -42,27 +39,27 @@ public class AddPropertyCommand extends Command {
             + PREFIX_TYPE + "HDB";
 
     public static final String MESSAGE_SUCCESS = "New property added to person: %1$s\n%2$s";
-    public static final String MESSAGE_DUPLICATE_PROPERTY = "One or more selected persons already have this property.";
-    public static final String MESSAGE_DUPLICATE_HDB_PROPERTY =
-            "One or more selected persons already have an HDB property. "
+    public static final String MESSAGE_DUPLICATE_PROPERTY = "This person already has this property.";
+    public static final String MESSAGE_DUPLICATE_HDB_PROPERTY = "This person already has an HDB property. "
             + "Each person can only have a maximum of 1 HDB property.";
     public static final String MESSAGE_NO_PERSONS = "No clients found. Please add a client first.";
-    public static final String MESSAGE_INVALID_PERSON_INDEX = "One or more person indices provided are invalid.";
+    public static final String MESSAGE_INVALID_PERSON_INDEX = "The person index provided is invalid.";
+    public static final String MESSAGE_PROPERTY_ALREADY_OWNED = "This property is already owned by another client.";
 
-    private final List<Index> targetIndices;
+    private final Index targetIndex;
     private final Property property;
 
     /**
      * Creates an AddPropertyCommand to add the specified {@code Property}
-     * to the person at the specified {@code Index} list.
+     * to the person at the specified {@code Index}.
      *
-     * @param targetIndices The indices of the person to add the property to.
-     * @param property The property to add.
+     * @param targetIndex The index of the person to add the property to.
+     * @param property    The property to add.
      */
-    public AddPropertyCommand(List<Index> targetIndices, Property property) {
-        requireNonNull(targetIndices);
+    public AddPropertyCommand(Index targetIndex, Property property) {
+        requireNonNull(targetIndex);
         requireNonNull(property);
-        this.targetIndices = new ArrayList<>(targetIndices);
+        this.targetIndex = targetIndex;
         this.property = property;
     }
 
@@ -83,39 +80,33 @@ public class AddPropertyCommand extends Command {
             throw new CommandException(MESSAGE_NO_PERSONS);
         }
 
-        List<Person> personsToEdit = new ArrayList<>();
-
-        for (Index targetIndex : targetIndices) {
-            if (targetIndex.getZeroBased() >= lastShownList.size()) {
-                throw new CommandException(MESSAGE_INVALID_PERSON_INDEX);
-            }
-
-            Person personToEdit = lastShownList.get(targetIndex.getZeroBased());
-
-            if (personToEdit.hasProperty(property)) {
-                throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
-            }
-
-            // Check if trying to add an HDB property when person already has one
-            if (property.getPropertyType() != null
-                    && property.getPropertyType().toString().equalsIgnoreCase("HDB")
-                    && personToEdit.hasHdbProperty()) {
-                throw new CommandException(MESSAGE_DUPLICATE_HDB_PROPERTY);
-            }
-
-            personsToEdit.add(personToEdit);
+        if (targetIndex.getZeroBased() >= lastShownList.size()) {
+            throw new CommandException(MESSAGE_INVALID_PERSON_INDEX);
         }
 
-        for (Person personToEdit : personsToEdit) {
-            Person editedPerson = personToEdit.addProperty(property);
-            model.setPerson(personToEdit, editedPerson);
+        Person personToEdit = lastShownList.get(targetIndex.getZeroBased());
+
+        if (personToEdit.hasProperty(property)) {
+            throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
         }
 
-        String personsEdited = personsToEdit.stream()
-                .map(person -> person.getName().toString())
-                .collect(Collectors.joining(", "));
+        for (Person person : model.getFilteredPersonList()) {
+            if (!person.equals(personToEdit) && person.getProperties().contains(property)) {
+                throw new CommandException(MESSAGE_PROPERTY_ALREADY_OWNED);
+            }
+        }
 
-        return new CommandResult(String.format(MESSAGE_SUCCESS, personsEdited, property));
+        // Check if trying to add an HDB property when person already has one
+        if (property.getPropertyType() != null
+                && property.getPropertyType().toString().equalsIgnoreCase("HDB")
+                && personToEdit.hasHdbProperty()) {
+            throw new CommandException(MESSAGE_DUPLICATE_HDB_PROPERTY);
+        }
+
+        Person editedPerson = personToEdit.addProperty(property);
+        model.setPerson(personToEdit, editedPerson);
+
+        return new CommandResult(String.format(MESSAGE_SUCCESS, personToEdit.getName(), property));
     }
 
     /**
@@ -134,14 +125,14 @@ public class AddPropertyCommand extends Command {
         }
 
         AddPropertyCommand otherAddPropertyCommand = (AddPropertyCommand) other;
-        return targetIndices.equals(otherAddPropertyCommand.targetIndices)
+        return targetIndex.equals(otherAddPropertyCommand.targetIndex)
                 && property.equals(otherAddPropertyCommand.property);
     }
 
     @Override
     public String toString() {
         return new ToStringBuilder(this)
-                .add("targetIndices", targetIndices)
+                .add("targetIndex", targetIndex)
                 .add("property", property)
                 .toString();
     }

@@ -8,11 +8,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
-import java.util.ArrayList;
-import java.util.LinkedHashSet;
-import java.util.List;
-import java.util.Set;
-
 import seedu.address.commons.core.index.Index;
 import seedu.address.logic.commands.AddPropertyCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -46,14 +41,12 @@ public class AddPropertyCommandParser implements Parser<AddPropertyCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
         }
 
+        if (argMultimap.getAllValues(PREFIX_LISTING_INDEX).size() != 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+        }
+
         try {
-            List<String> indexValues = argMultimap.getAllValues(PREFIX_LISTING_INDEX);
-            Set<Index> uniqueIndices = new LinkedHashSet<>();
-
-            for (String indexValue : indexValues) {
-                uniqueIndices.add(ParserUtil.parseIndex(indexValue));
-            }
-
+            Index targetIndex = ParserUtil.parseIndex(argMultimap.getValue(PREFIX_LISTING_INDEX).get());
             PropertyAddress address = new PropertyAddress(argMultimap.getValue(PREFIX_ADDRESS).get());
             Price price = new Price(argMultimap.getValue(PREFIX_PRICE).get());
             Size size = new Size(argMultimap.getValue(PREFIX_SIZE).get());
@@ -64,7 +57,7 @@ public class AddPropertyCommandParser implements Parser<AddPropertyCommand> {
             }
 
             Property property = new Property(address, price, size, propertyType);
-            return new AddPropertyCommand(new ArrayList<>(uniqueIndices), property);
+            return new AddPropertyCommand(targetIndex, property);
         } catch (IllegalArgumentException e) {
             throw new ParseException(e.getMessage());
         }

@@ -9,8 +9,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseFailure;
 import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSuccess;
 
-import java.util.List;
-
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -45,7 +43,7 @@ public class AddPropertyCommandParserTest {
                 new PropertyAddress(VALID_ADDRESS),
                 new Price(VALID_PRICE),
                 new Size(VALID_SIZE));
-        AddPropertyCommand expectedCommand = new AddPropertyCommand(List.of(Index.fromOneBased(1)), property);
+        AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
@@ -91,6 +89,13 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_PRICE + VALID_PRICE;
 
         assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_multipleIndices_failure() {
+        assertParseFailure(parser,
+                " i/1 i/2 a/311 Clementi Ave 2 pr/1200000 s/1200",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
     }
 
@@ -141,7 +146,7 @@ public class AddPropertyCommandParserTest {
                 new Price(VALID_PRICE),
                 new Size(VALID_SIZE),
                 new PropertyType("HDB"));
-        AddPropertyCommand expectedCommand = new AddPropertyCommand(List.of(Index.fromOneBased(1)), property);
+        AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
 
         assertParseSuccess(parser, userInput, expectedCommand);
     }
