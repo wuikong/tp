@@ -270,18 +270,18 @@ Examples:
 ### Deleting a property : `deleteProperty`
 
 ![deleteProperty](images/deleteProperty.png)
-Deletes all properties of specified client from the address book.
+Deletes the specified property from the address book.
 
 Format: `deleteProperty INDEX`
 
-* Deletes the properties of client at the specified `INDEX`.
-* The index refers to the index number shown in the displayed client list on the left.
+* Deletes the property at the specified `INDEX`.
+* The index refers to the index number shown in the displayed property list on the right.
 * The index **must be a positive integer** 1, 2, 3, …
 
 Examples:
 
-* `list` followed by `deleteProperty 2` deletes all properties of the 2nd client in the address book.
-* `find john` followed by `deleteProperty 1` deletes all properties of the 1st client named `john`.
+* `list` followed by `deleteProperty 2` deletes the 2nd property in the address book.
+* `find john` followed by `deleteProperty 1` deletes the 1st property in the results of the `find` command.
 
 ### Clearing all entries : `clear`
 
