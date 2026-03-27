@@ -32,21 +32,21 @@ public class ViewPropertyCommandTest {
                 new Price("1000000"),
                 new Size("121")
         );
-        Property propertyAWithDifferentDetails = new Property(
-                new PropertyAddress("123 Clementi Ave 3"),
-                new Price("1100000"),
-                new Size("150")
-        );
         Property propertyB = new Property(
                 new PropertyAddress("456 Jurong West St 42"),
                 new Price("900000"),
                 new Size("99")
         );
+        Property propertyC = new Property(
+                new PropertyAddress("789 Ang Mo Kio Ave 5"),
+                new Price("850000"),
+                new Size("110")
+        );
 
-        // Add properties
+        // Add properties with single ownership
         new AddPropertyCommand(INDEX_FIRST_PERSON, propertyA).execute(model);
-        new AddPropertyCommand(INDEX_SECOND_PERSON, propertyAWithDifferentDetails).execute(model);
-        new AddPropertyCommand(INDEX_THIRD_PERSON, propertyB).execute(model);
+        new AddPropertyCommand(INDEX_SECOND_PERSON, propertyB).execute(model);
+        new AddPropertyCommand(INDEX_THIRD_PERSON, propertyC).execute(model);
 
         return model;
     }
@@ -58,13 +58,40 @@ public class ViewPropertyCommandTest {
 
         CommandResult result = command.execute(model);
 
-        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 2), result.getFeedbackToUser());
-        assertEquals(2, model.getFilteredPropertyList().size());
-        assertEquals(2, model.getFilteredPersonList().size());
+        // With single ownership, viewing a property shows only its one owner
+        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 1), result.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(1, model.getFilteredPersonList().size());
         assertTrue(model.getFilteredPersonList().stream()
                 .anyMatch(person -> person.getName().fullName.equals("Alice Pauline")));
+    }
+
+    @Test
+    public void execute_viewSecondProperty_showsCorrectOwner() throws Exception {
+        Model model = createModelWithProperties();
+        ViewPropertyCommand command = new ViewPropertyCommand(Index.fromZeroBased(1));
+
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 1), result.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(1, model.getFilteredPersonList().size());
         assertTrue(model.getFilteredPersonList().stream()
                 .anyMatch(person -> person.getName().fullName.equals("Benson Meier")));
+    }
+
+    @Test
+    public void execute_viewThirdProperty_showsCorrectOwner() throws Exception {
+        Model model = createModelWithProperties();
+        ViewPropertyCommand command = new ViewPropertyCommand(Index.fromZeroBased(2));
+
+        CommandResult result = command.execute(model);
+
+        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 1), result.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(1, model.getFilteredPersonList().size());
+        assertTrue(model.getFilteredPersonList().stream()
+                .anyMatch(person -> person.getName().fullName.equals("Carl Kurz")));
     }
 
     @Test
