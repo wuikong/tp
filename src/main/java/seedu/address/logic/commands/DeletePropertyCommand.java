@@ -48,13 +48,19 @@ public class DeletePropertyCommand extends Command {
 
         Property propertyToDelete = lastShownPropertyList.get(index.getZeroBased());
 
-        // Remove the property from all persons who own it
-        List<Person> allPersons = model.getFilteredPersonList();
-        for (Person person : allPersons) {
+        // Find the owner of the property (with single ownership, there's only one)
+        Person ownerOfProperty = null;
+        for (Person person : model.getFilteredPersonList()) {
             if (person.getProperties().contains(propertyToDelete)) {
-                Person editedPerson = person.removeProperty(propertyToDelete);
-                model.setPerson(person, editedPerson);
+                ownerOfProperty = person;
+                break;
             }
+        }
+
+        // Remove the property from its owner (if found)
+        if (ownerOfProperty != null) {
+            Person editedPerson = ownerOfProperty.removeProperty(propertyToDelete);
+            model.setPerson(ownerOfProperty, editedPerson);
         }
 
         return new CommandResult(String.format(MESSAGE_SUCCESS, propertyToDelete));
