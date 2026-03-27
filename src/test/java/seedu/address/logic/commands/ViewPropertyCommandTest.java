@@ -105,6 +105,32 @@ public class ViewPropertyCommandTest {
     }
 
     @Test
+    public void execute_propertyWithNoOwner_filtersPersonListToEmpty() throws Exception {
+        // This test covers the else branch (lines 54-56) where no owner is found
+        Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+        Property propertyA = new Property(
+                new PropertyAddress("123 Clementi Ave 3"),
+                new Price("1000000"),
+                new Size("121")
+        );
+
+        // Add property to a person
+        new AddPropertyCommand(INDEX_FIRST_PERSON, propertyA).execute(model);
+
+        // Filter out all persons, making the property "orphaned" from the current filtered list
+        model.updateFilteredPersonList(person -> false);
+
+        ViewPropertyCommand command = new ViewPropertyCommand(Index.fromZeroBased(0));
+        CommandResult result = command.execute(model);
+
+        // Should return 0 persons since all persons are filtered out (no owner in current view)
+        assertEquals(String.format(Messages.MESSAGE_PERSONS_LISTED_OVERVIEW, 0), result.getFeedbackToUser());
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(0, model.getFilteredPersonList().size());
+    }
+
+    @Test
     public void equals() {
         ViewPropertyCommand viewFirstCommand = new ViewPropertyCommand(INDEX_FIRST_PERSON);
         ViewPropertyCommand viewSecondCommand = new ViewPropertyCommand(INDEX_SECOND_PERSON);
