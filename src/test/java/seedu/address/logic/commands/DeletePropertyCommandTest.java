@@ -116,6 +116,29 @@ public class DeletePropertyCommandTest {
     }
 
     @Test
+    public void execute_propertyWithNoOwner_gracefulHandling() throws CommandException {
+        // This test covers the edge case where a property exists but has no owner in the filtered list
+        // Add a property to the first person
+        Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
+                new Price("1200000"), new Size("1200"));
+        AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
+                testProperty);
+        addPropertyCommand.execute(model);
+
+        // Filter out all persons, making the property "orphaned" from the current filtered list
+        model.updateFilteredPersonList(person -> false);
+
+        DeletePropertyCommand deleteCommand = new DeletePropertyCommand(INDEX_FIRST_PROPERTY);
+        String expectedMessage = String.format(DeletePropertyCommand.MESSAGE_SUCCESS, testProperty);
+        CommandResult result = deleteCommand.execute(model);
+
+        // Should still report successful deletion even with no owner found (graceful handling)
+        assertEquals(expectedMessage, result.getFeedbackToUser());
+        // Property list remains unchanged since no owner was found to remove it from
+        assertEquals(1, model.getFilteredPropertyList().size());
+    }
+
+    @Test
     public void equals() {
         DeletePropertyCommand deleteFirstCommand = new DeletePropertyCommand(INDEX_FIRST_PROPERTY);
         DeletePropertyCommand deleteSecondCommand = new DeletePropertyCommand(INDEX_SECOND_PROPERTY);
