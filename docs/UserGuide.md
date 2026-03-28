@@ -150,7 +150,7 @@ Examples:
 Edits the details of the client identified by the index number used in the displayed client list.
 Existing values will be overwritten by the input values.
 
-Format: `editClient INDEX [n/NAME] [c/CONTACT] [e/EMAIL]`
+Format: `editClient INDEX [n/NAME] [c/PHONE] [e/EMAIL] [t/TAG]...`
 
 <box type="tip" seamless>
 
@@ -158,6 +158,8 @@ Format: `editClient INDEX [n/NAME] [c/CONTACT] [e/EMAIL]`
 
 - At least one of the optional fields must be provided.
 - Only the specified fields will be updated; all other fields will remain unchanged.
+- If one or more `t/` prefixes are provided, the client’s existing tags will be replaced.
+- You can use `t/` without a value to clear all existing tags.
 
 </box>
 
@@ -165,6 +167,8 @@ Examples:
 
 * `editClient 1 c/91234567 e/johndoe@example.com`
 * `editClient 2 n/Alex Yeoh`
+* `editClient 1 t/friend t/vip`
+* `editClient 3 t/`
 
 ### Editing a property: `editProperty`
 

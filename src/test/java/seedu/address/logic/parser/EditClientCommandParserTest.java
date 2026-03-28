@@ -6,6 +6,7 @@ import static seedu.address.logic.commands.CommandTestUtil.EMAIL_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_EMAIL_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_NAME_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.INVALID_PHONE_DESC;
+import static seedu.address.logic.commands.CommandTestUtil.INVALID_TAG_DESC;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_AMY;
 import static seedu.address.logic.commands.CommandTestUtil.NAME_DESC_BOB;
 import static seedu.address.logic.commands.CommandTestUtil.PHONE_DESC_AMY;
@@ -17,6 +18,9 @@ import static seedu.address.logic.parser.CommandParserTestUtil.assertParseSucces
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
+import java.util.Collections;
+import java.util.List;
+
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -25,6 +29,7 @@ import seedu.address.logic.commands.EditClientCommand.EditClientDescriptor;
 import seedu.address.model.person.Email;
 import seedu.address.model.person.Name;
 import seedu.address.model.person.Phone;
+import seedu.address.model.tag.Tag;
 
 public class EditClientCommandParserTest {
     private static final String MESSAGE_INVALID_FORMAT =
@@ -45,6 +50,7 @@ public class EditClientCommandParserTest {
         assertParseFailure(parser, "-1" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
         assertParseFailure(parser, "0" + NAME_DESC_AMY, MESSAGE_INVALID_FORMAT);
         assertParseFailure(parser, "1 some random string", MESSAGE_INVALID_FORMAT);
+        assertParseFailure(parser, "1" + INVALID_TAG_DESC, Tag.MESSAGE_CONSTRAINTS);
     }
 
     @Test
@@ -55,21 +61,23 @@ public class EditClientCommandParserTest {
     }
 
     @Test
-    public void parse_allFieldsSpecified_success() {
+    public void parse_allFieldsSpecified_success() throws Exception {
         Index targetIndex = INDEX_SECOND_PERSON;
-        String userInput = targetIndex.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB;
+        String userInput = targetIndex.getOneBased() + NAME_DESC_BOB + PHONE_DESC_BOB + EMAIL_DESC_BOB
+                + " t/friend t/vip";
 
         EditClientDescriptor descriptor = new EditClientDescriptor();
         descriptor.setName(new Name("Bob Choo"));
         descriptor.setPhone(new Phone("22222222"));
         descriptor.setEmail(new Email("bob@example.com"));
+        descriptor.setTags(ParserUtil.parseTags(List.of("friend", "vip")));
 
         EditClientCommand expectedCommand = new EditClientCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
     }
 
     @Test
-    public void parse_oneFieldSpecified_success() {
+    public void parse_oneFieldSpecified_success() throws Exception {
         Index targetIndex = INDEX_FIRST_PERSON;
 
         String userInput = targetIndex.getOneBased() + NAME_DESC_AMY;
@@ -86,5 +94,35 @@ public class EditClientCommandParserTest {
         descriptor = new EditClientDescriptor();
         descriptor.setEmail(new Email("amy@example.com"));
         assertParseSuccess(parser, userInput, new EditClientCommand(targetIndex, descriptor));
+
+        userInput = targetIndex.getOneBased() + " t/friend t/vip";
+        descriptor = new EditClientDescriptor();
+        descriptor.setTags(ParserUtil.parseTags(List.of("friend", "vip")));
+        assertParseSuccess(parser, userInput, new EditClientCommand(targetIndex, descriptor));
+    }
+
+    @Test
+    public void parse_clearTags_success() {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + " t/";
+
+        EditClientDescriptor descriptor = new EditClientDescriptor();
+        descriptor.setTags(Collections.emptySet());
+
+        EditClientCommand expectedCommand = new EditClientCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_nameAndTagsSpecified_success() throws Exception {
+        Index targetIndex = INDEX_FIRST_PERSON;
+        String userInput = targetIndex.getOneBased() + NAME_DESC_AMY + " t/friend t/vip";
+
+        EditClientDescriptor descriptor = new EditClientDescriptor();
+        descriptor.setName(new Name("Amy Bee"));
+        descriptor.setTags(ParserUtil.parseTags(List.of("friend", "vip")));
+
+        EditClientCommand expectedCommand = new EditClientCommand(targetIndex, descriptor);
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 }
