@@ -16,16 +16,20 @@ class ViewClientCommandParserTest {
     @Test
     void parse_invalidArgs_throwsParseException() {
         // Empty input
-        assertParseFailure(parser, " ", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " ", String.format(
+                MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
 
         // Non-numeric input
-        assertParseFailure(parser, "abc", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "abc", String.format(
+                MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
 
         // Negative number
-        assertParseFailure(parser, "-1", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "-1", String.format(
+                MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
 
         // Zero is invalid (Index is 1-based)
-        assertParseFailure(parser, "0", String.format(MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, "0", String.format(
+                MESSAGE_INVALID_COMMAND_FORMAT, ViewClientCommand.MESSAGE_USAGE));
     }
 
     @Test

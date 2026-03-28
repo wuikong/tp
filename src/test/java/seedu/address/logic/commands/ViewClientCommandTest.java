@@ -98,7 +98,8 @@ public class ViewClientCommandTest {
 
         CommandResult result = command.execute(model);
 
-        assertEquals(String.format(MESSAGE_CLIENT_VIEWED_SUCCESS, Messages.format(bensonWithProperty)), result.getFeedbackToUser());
+        assertEquals(String.format(MESSAGE_CLIENT_VIEWED_SUCCESS,
+                Messages.format(bensonWithProperty)), result.getFeedbackToUser());
         assertEquals(1, model.getFilteredPropertyList().size());
         assertTrue(model.getFilteredPropertyList().contains(bensonOnlyProperty));
         assertFalse(model.getFilteredPropertyList().contains(aliceOnlyProperty));
