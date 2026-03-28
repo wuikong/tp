@@ -55,9 +55,13 @@ public class FilterPropertyCommandParserTest {
 
     @Test
     public void parse_invalidRangeArgCount_throwsParseException() {
+        assertParseFailure(parser, " pr/1000 10000 500", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FilterPropertyCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/500 5000 1000", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FilterPropertyCommand.MESSAGE_USAGE));
         assertParseFailure(parser, " pr/1000", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 FilterPropertyCommand.MESSAGE_USAGE));
-        assertParseFailure(parser, " s/500 1000 2000", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+        assertParseFailure(parser, " s/500", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 FilterPropertyCommand.MESSAGE_USAGE));
     }
 }

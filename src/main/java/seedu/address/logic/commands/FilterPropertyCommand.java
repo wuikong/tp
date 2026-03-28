@@ -6,7 +6,6 @@ import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
 
 import seedu.address.commons.util.ToStringBuilder;
-import seedu.address.logic.Messages;
 import seedu.address.model.Model;
 import seedu.address.model.property.PropertyMatchesFilterPredicate;
 
@@ -26,6 +25,8 @@ public class FilterPropertyCommand extends Command {
             + PREFIX_PRICE + "1000 10000 "
             + PREFIX_SIZE + "500 5000";
 
+    public static final String MESSAGE_PROPERTIES_LISTED = "%1$d properties listed!";
+
     private final PropertyMatchesFilterPredicate predicate;
 
     /**
@@ -43,7 +44,7 @@ public class FilterPropertyCommand extends Command {
         model.updateFilteredPersonList(person -> model.getFilteredPropertyList().stream()
                 .anyMatch(property -> person.getProperties().contains(property)));
         return new CommandResult(
-                String.format(Messages.MESSAGE_PROPERTIES_LISTED_OVERVIEW, model.getFilteredPropertyList().size()));
+                String.format(MESSAGE_PROPERTIES_LISTED, model.getFilteredPropertyList().size()));
     }
 
     @Override

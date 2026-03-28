@@ -3,8 +3,8 @@ package seedu.address.logic.commands;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
-import static seedu.address.logic.Messages.MESSAGE_PROPERTIES_LISTED_OVERVIEW;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandSuccess;
+import static seedu.address.logic.commands.FilterPropertyCommand.MESSAGE_PROPERTIES_LISTED;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PERSON;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
@@ -77,7 +77,7 @@ public class FilterPropertyCommandTest {
 
     @Test
     public void execute_addressKeyword_noPropertyFound() {
-        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED_OVERVIEW, 0);
+        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED, 0);
         PropertyMatchesFilterPredicate predicate = preparePredicate("Orchard");
         FilterPropertyCommand command = new FilterPropertyCommand(predicate);
         expectedModel.updateFilteredPropertyList(predicate);
@@ -91,7 +91,7 @@ public class FilterPropertyCommandTest {
 
     @Test
     public void execute_multipleKeywords_multiplePropertiesAndOwnersFound() {
-        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED_OVERVIEW, 2);
+        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED, 2);
         PropertyMatchesFilterPredicate predicate = preparePredicate("Clementi Punggol");
         FilterPropertyCommand command = new FilterPropertyCommand(predicate);
         expectedModel.updateFilteredPropertyList(predicate);
@@ -108,7 +108,7 @@ public class FilterPropertyCommandTest {
 
     @Test
     public void execute_priceRangeAndSizeRange_propertiesAndOwnersFound() {
-        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED_OVERVIEW, 2);
+        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED, 2);
         PropertyMatchesFilterPredicate predicate =
                 new PropertyMatchesFilterPredicate(Collections.emptyList(), 900000, 1300000, 1050, 1300);
         FilterPropertyCommand command = new FilterPropertyCommand(predicate);
