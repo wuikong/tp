@@ -22,6 +22,7 @@ import seedu.address.logic.commands.FilterPropertyCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemarkPropertyCommand;
+import seedu.address.logic.commands.SortPropertyCommand;
 import seedu.address.logic.commands.ViewClientCommand;
 import seedu.address.logic.commands.ViewPropertyCommand;
 import seedu.address.logic.parser.exceptions.ParseException;
@@ -83,6 +84,13 @@ public class AddressBookParserTest {
         RemarkPropertyCommand command = (RemarkPropertyCommand) parser.parseCommand(
                 RemarkPropertyCommand.COMMAND_WORD + " " + INDEX_FIRST_PERSON.getOneBased() + " r/Near MRT");
         assertEquals(new RemarkPropertyCommand(INDEX_FIRST_PERSON, "Near MRT"), command);
+    }
+
+    @Test
+    public void parseCommand_sortProperty() throws Exception {
+        SortPropertyCommand command = (SortPropertyCommand) parser.parseCommand(
+                SortPropertyCommand.COMMAND_WORD + " st/price o/up");
+        assertEquals(new SortPropertyCommand("price", "up"), command);
     }
 
     @Test

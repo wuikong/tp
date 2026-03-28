@@ -169,6 +169,11 @@ public class AddClientCommandTest {
         public void updateFilteredPropertyList(Predicate<Property> predicate) {
             throw new AssertionError("This method should not be called.");
         }
+
+        @Override
+        public void sortPropertyList(java.util.Comparator<Property> comparator) {
+            throw new AssertionError("This method should not be called.");
+        }
     }
 
     /**
