@@ -1,6 +1,7 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.logic.Messages;
@@ -16,8 +17,8 @@ public class FilterPropertyCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all properties whose addresses contain any"
             + " of the specified keywords (case-insensitive) and displays them as a list with index numbers.\n"
-            + "Parameters: a/ADDRESS\n"
-            + "Example: " + COMMAND_WORD + " a/Clementi";
+            + "Parameters: " + PREFIX_ADDRESS + "/ADDRESS\n"
+            + "Example: " + COMMAND_WORD + " " + PREFIX_ADDRESS + "/Clementi Punggol";
 
     private final PropertyAddressContainsKeywordsPredicate predicate;
 
