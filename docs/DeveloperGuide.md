@@ -162,8 +162,6 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Filter Property feature
 
-#### Implementation
-
 The filter property feature allows users to filter properties by address keywords and automatically display the owners of those properties. This is done by updating the predicates on the `FilteredList` objects.
 
 The `FilterPropertyCommand` is executed through the following flow:
