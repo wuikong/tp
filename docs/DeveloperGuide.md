@@ -162,7 +162,7 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Add Property feature
 
-The add property feature allows users to add a property to a client identified by the index in the displayed client list. 
+The add property feature allows users to add a property to a client identified by the index in the displayed client list.
 This is done by validating the property addition and updating the target client in the address book.
 
 The `AddPropertyCommand` is executed through the following flow:
@@ -175,7 +175,7 @@ The `AddPropertyCommand` is executed through the following flow:
 6. `ModelManager#setPerson(...)` updates the target client in the underlying `AddressBook`.
 7. The command returns a `CommandResult` after the target client has been updated.
 
-For simplicity, the sequence diagram below focuses on the main interactions involved in updating the target client 
+For simplicity, the sequence diagram below focuses on the main interactions involved in updating the target client
 and omits lower-level validation details such as index checks, duplicate ownership checks, and exception handling.
 
 The following sequence diagram illustrates the interactions:
@@ -196,7 +196,7 @@ The `DeletePropertyCommand` is executed through the following flow:
 6. `ModelManager#setPerson(...)` updates the target client in the underlying `AddressBook`.
 7. The command returns a `CommandResult` after the target client has been updated.
 
-For simplicity, the sequence diagram below focuses on the main interactions involved in updating the target client and 
+For simplicity, the sequence diagram below focuses on the main interactions involved in updating the target client and
 omits lower-level validation details such as index checks, ownership checks, and exception handling.
 
 The following sequence diagram illustrates the interactions:
