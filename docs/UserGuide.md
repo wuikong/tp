@@ -382,8 +382,8 @@ Action              | Format, Examples
 **Clear**           | `clear`
 **Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`
 **Delete Property** | `deleteProperty INDEX`<br> e.g., `deleteProperty 3`
-**Edit Client**     | `editClient INDEX [n/NAME] [c/CONTACT] [e/EMAIL]`<br> e.g., `editClient 2 n/Alex Yeoh`
-**Edit Property**   | `editProperty CLIENT_INDEX i/PROPERTY_INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE]`<br> e.g., `editProperty 1 i/1 a/123 Clementi Road pr/500000 s/1200`
+**Edit Client**     | `editClient INDEX [n/NAME] [c/CONTACT] [e/EMAIL] [t/TAG]...`<br> e.g., `editClient 2 n/Alex Yeoh`
+**Edit Property**   | `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE]`<br> e.g., `editProperty 1 a/123 Clementi Road pr/500000 s/1200`
 **Filter Client**   | `filterClient n/KEYWORD [MORE_KEYWORDS]`<br> e.g., `filterClient n/James Jake`
 **Filter Property** | `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`<br> e.g., `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500`
 **List**            | `list`

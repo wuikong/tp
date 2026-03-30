@@ -36,8 +36,6 @@ public class EditPropertyCommand extends Command {
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PROPERTY =
             "This client already has another property with the same address.";
-    public static final String MESSAGE_PROPERTY_OWNER_NOT_FOUND =
-            "Property owner not found.";
     public static final String MESSAGE_NO_PROPERTIES =
             "No properties found. Please add a property first.";
 
@@ -81,11 +79,9 @@ public class EditPropertyCommand extends Command {
             }
         }
 
+        // Invariant: each Property is stored under exactly one Person in the model,
+        // hence any property retrieved from the model must have a corresponding owner
         assert owner != null : "Property must have an owner";
-
-        if (owner == null) {
-            throw new CommandException(MESSAGE_PROPERTY_OWNER_NOT_FOUND);
-        }
 
         for (Property p : owner.getProperties()) {
             if (!p.equals(propertyToEdit) && p.isSameProperty(editedProperty)) {
@@ -96,7 +92,7 @@ public class EditPropertyCommand extends Command {
         Set<Property> updatedProperties = new LinkedHashSet<>();
         for (Property p : owner.getProperties()) {
             if (p.equals(propertyToEdit)) {
-                updatedProperties.add(editedProperty); // 在原位置替换
+                updatedProperties.add(editedProperty);
             } else {
                 updatedProperties.add(p);
             }
