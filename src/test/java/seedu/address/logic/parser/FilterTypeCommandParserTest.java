@@ -32,32 +32,37 @@ public class FilterTypeCommandParserTest {
 
     @Test
     public void parse_validSingleKeyword_returnsFilterTypeCommand() {
-        // Single keyword
+        // Single keyword HDB
         FilterTypeCommand expectedFilterTypeCommand =
                 new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("HDB")));
         assertParseSuccess(parser, " type/HDB", expectedFilterTypeCommand);
-    }
 
-    @Test
-    public void parse_validMultipleKeywords_returnsFilterTypeCommand() {
-        // Multiple keywords
-        FilterTypeCommand expectedFilterTypeCommand =
-                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("HDB", "Condo")));
-        assertParseSuccess(parser, " type/HDB Condo", expectedFilterTypeCommand);
-    }
-
-    @Test
-    public void parse_multipleWhitespaces_returnsFilterTypeCommand() {
-        // Multiple whitespaces between keywords
-        FilterTypeCommand expectedFilterTypeCommand =
-                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("HDB", "Condo")));
-        assertParseSuccess(parser, " type/ HDB \n \t Condo  \t", expectedFilterTypeCommand);
+        // Single keyword Condo
+        expectedFilterTypeCommand =
+                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("Condo")));
+        assertParseSuccess(parser, " type/Condo", expectedFilterTypeCommand);
     }
 
     @Test
     public void parse_caseInsensitiveKeywords_returnsFilterTypeCommand() {
         FilterTypeCommand expectedFilterTypeCommand =
-                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("hdb", "condo")));
-        assertParseSuccess(parser, " type/hdb condo", expectedFilterTypeCommand);
+                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("hdb")));
+        assertParseSuccess(parser, " type/hdb", expectedFilterTypeCommand);
+
+        expectedFilterTypeCommand =
+                new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList("CONDO")));
+        assertParseSuccess(parser, " type/CONDO", expectedFilterTypeCommand);
+    }
+
+    @Test
+    public void parse_multipleKeywords_throwsParseException() {
+        assertParseFailure(parser, " type/HDB Condo",
+                "Only one type is allowed. Use 'HDB' or 'Condo' (case-insensitive).");
+    }
+
+    @Test
+    public void parse_invalidType_throwsParseException() {
+        assertParseFailure(parser, " type/Apartment",
+                "Invalid type. Only 'HDB' or 'Condo' are allowed (case-insensitive).");
     }
 }
