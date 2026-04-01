@@ -32,8 +32,8 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
                 ArgumentTokenizer.tokenize(args, PREFIX_ADDRESS, PREFIX_PRICE, PREFIX_SIZE);
 
         if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_ADDRESS, PREFIX_PRICE, PREFIX_SIZE);
@@ -53,8 +53,8 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
         }
 
         if (addressKeywords.isEmpty() && priceRange.isEmpty() && sizeRange.isEmpty()) {
-            throw new ParseException(
-                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
         }
 
         long minPrice = priceRange.map(range -> range[0]).orElse(Long.valueOf(0));
@@ -90,7 +90,12 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
 
         long first = parseNumericBoundary(parts[0], isPriceRange);
         long second = parseNumericBoundary(parts[1], isPriceRange);
-        return new long[] {Math.min(first, second), Math.max(first, second)};
+        if (first > second) {
+            throw new ParseException(String.format(
+                    MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
+        }
+
+        return new long[] {first, second};
     }
 
     private long parseNumericBoundary(String rawValue, boolean isPriceRange) throws ParseException {
