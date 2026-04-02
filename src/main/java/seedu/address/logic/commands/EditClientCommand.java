@@ -2,6 +2,10 @@ package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.Messages.MESSAGE_INVALID_PERSON_DISPLAYED_INDEX;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_EMAIL;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_NAME;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PHONE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TAG;
 
 import java.util.Collections;
 import java.util.HashSet;
@@ -9,6 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import seedu.address.commons.core.index.Index;
 import seedu.address.commons.util.CollectionUtil;
@@ -29,13 +34,19 @@ public class EditClientCommand extends Command {
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the details of the client identified "
             + "by the index number used in the displayed client list. "
-            + "Existing values will be overwritten by the input values. \n"
+            + "Existing values will be overwritten by the input values.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[n/NAME] [c/PHONE] [e/EMAIL] [t/TAG]...\n"
+            + "[" + PREFIX_NAME + "NAME] "
+            + "[" + PREFIX_PHONE + "PHONE] "
+            + "[" + PREFIX_EMAIL + "EMAIL] "
+            + "[" + PREFIX_TAG + "TAG]...\n"
             + "Example: " + COMMAND_WORD + " 1 "
-            + "c/91234567 e/johndoe@example.com t/vip";
+            + PREFIX_PHONE + "91234567 "
+            + PREFIX_EMAIL + "johndoe@example.com "
+            + PREFIX_TAG + "vip";
 
-    public static final String MESSAGE_EDIT_CLIENT_SUCCESS = "Edited Client: %1$s";
+    public static final String MESSAGE_EDIT_CLIENT_SUCCESS =
+            "Edited Client: %1$s; Phone: %2$s; Email: %3$s; Tags: %4$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PERSON = "This client already exists in the address book.";
 
@@ -74,7 +85,13 @@ public class EditClientCommand extends Command {
 
         model.updateFilteredPersonList(p -> p.isSamePerson(editedPerson));
         model.updateFilteredPropertyList(p -> editedPerson.getProperties().contains(p));
-        return new CommandResult(String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson));
+        return new CommandResult(String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        ));
     }
 
     /**
@@ -106,6 +123,17 @@ public class EditClientCommand extends Command {
         EditClientCommand otherEditClientCommand = (EditClientCommand) other;
         return index.equals(otherEditClientCommand.index)
                 && editClientDescriptor.equals(otherEditClientCommand.editClientDescriptor);
+    }
+
+    /**
+     * Formats a set of tags into [tag][tag] style for display.
+     */
+    private static String formatTags(Set<Tag> tags) {
+        return tags.stream()
+                .map(tag -> tag.tagName)
+                .sorted()
+                .map(tag -> "[" + tag + "]")
+                .collect(Collectors.joining());
     }
 
     /**
