@@ -28,6 +28,10 @@ public class FilterTypeCommandParserTest {
     public void parse_emptyKeyword_throwsParseException() {
         assertParseFailure(parser, "type/", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 FilterTypeCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " type/   ", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FilterTypeCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " type/\t", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FilterTypeCommand.MESSAGE_USAGE));
     }
 
     @Test
