@@ -25,6 +25,12 @@ public class FilterTypeCommandParserTest {
     }
 
     @Test
+    public void parse_emptyKeyword_throwsParseException() {
+        assertParseFailure(parser, "type/", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                FilterTypeCommand.MESSAGE_USAGE));
+    }
+
+    @Test
     public void parse_noPrefix_throwsParseException() {
         assertParseFailure(parser, "HDB", String.format(MESSAGE_INVALID_COMMAND_FORMAT,
                 FilterTypeCommand.MESSAGE_USAGE));
