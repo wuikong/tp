@@ -44,6 +44,12 @@ public class EditClientCommandParser implements Parser<EditClientCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE), pe);
         }
 
+        if (argMultimap.getAllValues(PREFIX_NAME).size() > 1
+                || argMultimap.getAllValues(PREFIX_PHONE).size() > 1
+                || argMultimap.getAllValues(PREFIX_EMAIL).size() > 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        }
+
         EditClientDescriptor editClientDescriptor = new EditClientDescriptor();
 
         if (argMultimap.getValue(PREFIX_NAME).isPresent()) {

@@ -40,6 +40,13 @@ public class EditPropertyCommandParser implements Parser<EditPropertyCommand> {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE), pe);
         }
 
+        if (argMultimap.getAllValues(PREFIX_ADDRESS).size() > 1
+                || argMultimap.getAllValues(PREFIX_PRICE).size() > 1
+                || argMultimap.getAllValues(PREFIX_SIZE).size() > 1
+                || argMultimap.getAllValues(PREFIX_TYPE).size() > 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, MESSAGE_USAGE));
+        }
+
         EditPropertyDescriptor editPropertyDescriptor = new EditPropertyDescriptor();
 
         if (argMultimap.getValue(PREFIX_ADDRESS).isPresent()) {

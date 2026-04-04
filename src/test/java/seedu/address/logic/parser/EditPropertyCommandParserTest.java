@@ -107,27 +107,6 @@ public class EditPropertyCommandParserTest {
     }
 
     @Test
-    public void parse_repeatedFields_acceptsLast() {
-        Index index = Index.fromOneBased(1);
-
-        String userInput = "1"
-                + ADDRESS_DESC_AMY + ADDRESS_DESC_BOB
-                + PRICE_DESC_AMY + PRICE_DESC_BOB
-                + SIZE_DESC_AMY + SIZE_DESC_BOB
-                + TYPE_DESC_AMY + TYPE_DESC_BOB;
-
-        EditPropertyDescriptor descriptor = new EditPropertyDescriptor();
-        descriptor.setAddress(new PropertyAddress(VALID_ADDRESS_BOB));
-        descriptor.setPrice(new Price(VALID_PRICE_BOB));
-        descriptor.setSize(new Size(VALID_SIZE_BOB));
-        descriptor.setType(new PropertyType(VALID_TYPE_BOB));
-
-        EditPropertyCommand expectedCommand = new EditPropertyCommand(index, descriptor);
-
-        assertParseSuccess(parser, userInput, expectedCommand);
-    }
-
-    @Test
     public void parse_missingIndex_failure() {
         assertParseFailure(parser,
                 ADDRESS_DESC_AMY,
@@ -182,5 +161,33 @@ public class EditPropertyCommandParserTest {
         assertParseFailure(parser,
                 "1" + INVALID_SIZE_DESC,
                 Size.MESSAGE_CONSTRAINTS);
+    }
+
+    @Test
+    public void parse_repeatedAddress_failure() {
+        assertParseFailure(parser,
+                "1 a/111 Clementi Ave 1 a/222 Clementi Ave 2",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_repeatedPrice_failure() {
+        assertParseFailure(parser,
+                "1 pr/1000000 pr/2000000",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_repeatedSize_failure() {
+        assertParseFailure(parser,
+                "1 s/1000 s/2000",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_repeatedType_failure() {
+        assertParseFailure(parser,
+                "1 type/HDB type/Condo",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditPropertyCommand.MESSAGE_USAGE));
     }
 }

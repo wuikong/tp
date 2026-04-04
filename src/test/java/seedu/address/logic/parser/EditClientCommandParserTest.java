@@ -20,6 +20,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Set;
 
 import org.junit.jupiter.api.Test;
 
@@ -124,5 +125,36 @@ public class EditClientCommandParserTest {
 
         EditClientCommand expectedCommand = new EditClientCommand(targetIndex, descriptor);
         assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_repeatedName_failure() {
+        assertParseFailure(parser,
+                "1 n/Alice n/Bob",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditClientCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_repeatedPhone_failure() {
+        assertParseFailure(parser,
+                "1 c/11111111 c/22222222",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditClientCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_repeatedEmail_failure() {
+        assertParseFailure(parser,
+                "1 e/a@test.com e/b@test.com",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, EditClientCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_multipleTags_success() {
+        EditClientDescriptor descriptor = new EditClientDescriptor();
+        descriptor.setTags(Set.of(new Tag("friend"), new Tag("vip")));
+
+        assertParseSuccess(parser,
+                "1 t/friend t/vip",
+                new EditClientCommand(INDEX_FIRST_PERSON, descriptor));
     }
 }
