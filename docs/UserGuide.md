@@ -76,8 +76,8 @@ Format: `add n/NAME c/CONTACT e/EMAIL [t/TAG]…`
 
 Examples:
 
-* `add n/John Doe c/98765432 e/johnd@example.com`
-* `add n/Betsy Crowe t/friend e/betsycrowe@example.com c/1234567 t/criminal`
+* `addClient n/John Doe c/98765432 e/johnd@example.com`
+* `addClient n/Betsy Crowe t/friend e/betsycrowe@example.com c/1234567 t/criminal`
 
 ### Adding a property: `addProperty`
 
@@ -165,7 +165,7 @@ Format: `editClient INDEX [n/NAME] [c/PHONE] [e/EMAIL] [t/TAG]...`
 
 Examples:
 
-* `editClient 1 c/91234567 e/johndoe@example.com`
+* `editClient 1 a/Amy c/91234567 e/johndoe@example.com t/vip`
 * `editClient 2 n/Alex Yeoh`
 * `editClient 1 t/friend t/vip`
 * `editClient 3 t/`
@@ -176,7 +176,7 @@ Examples:
 Edits the property identified by the index number in the displayed property list.
 Existing values will be overwritten by the input values.
 
-Format: `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE]`
+Format: `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE] [type/TYPE]`
 
 <box type="tip" seamless>
 
@@ -190,9 +190,9 @@ Format: `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE]`
 
 Examples:
 
+* `editProperty 3 a/10 Marina Bay pr/3000000 s/2000 type/HDB`
 * `editProperty 1 a/123 Clementi Road`
 * `editProperty 2 pr/888888`
-* `editProperty 3 a/10 Marina Bay pr/3000000 s/2000`
 
 ### Adding remarks to a property : `remarkProperty`
 
@@ -214,25 +214,36 @@ Examples:
 * `remarkProperty 1 i/1 r/Needs renovation before move-in` adds said remark to the 1st property of the 1st client
 * `remarkProperty 2 i/1 r/Near Chinese Garden MRT`
 
-### Filtering clients by name: `filterClient`
+### Filtering clients by name and/or tag: `filterClient`
 
 ![filterClient](images/filterClient.png)
-Finds clients whose names contain any of the given keywords.
+Finds clients whose names and/or tags match the given keywords.
 
-Format: `filterClient n/KEYWORD [MORE_KEYWORDS]`
+Format: `filterClient [n/NAME_KEYWORDS] [t/TAG_KEYWORDS]`
 
-* The search is case-insensitive. e.g `hans` will match `Hans`
-* The order of the keywords does not matter. e.g. `Hans Bo` will match `Bo Hans`
-* Only the name is searched.
-* Only full words will be matched e.g. `Han` will not match `Hans`
-* Persons matching at least one keyword will be returned (i.e. `OR` search).
-  e.g. `Hans Bo` will return `Hans Gruber`, `Bo Yang`
-* The property list will show all properties that are owned by any of the matched clients.
+<box type="tip" seamless>
+
+**Tip:**
+
+- At least one filter criterion (name keywords or tag keywords) must be provided.
+- Multiple filter criteria can be combined in a single command.
+- The filtered clients will match at least one keyword in each filter criterion.
+- The property list will show all properties that are owned by any of the matched clients.
+
+</box>
+
+* Name matching is case-insensitive. e.g `hans` will match `Hans`
+* Tag matching is case-insensitive. e.g `owesmoney` will match `owesMoney`
+* For both name and tag filters, the order of keywords does not matter.
+* Name keywords must be valid names and match full words only. e.g. `Han` will not match `Hans`
+* For each prefix, clients matching at least one keyword are returned (i.e. `OR` within `n/`, `OR` within `t/`).
+  e.g. `n/Hans Bo` will return `Hans Gruber`, `Bo Yang`
 
 Examples:
 
 * `filterClient n/John` returns `john` and `John Doe`
-* `filterClient n/alex david` returns `Alex Yeoh`, `David Li`<br>
+* `filterClient t/owesMoney` returns clients tagged `owesMoney`
+* `filterClient n/alex david t/friends` returns clients whose name matches `alex` or `david`, and who are tagged `friends`<br>
 
 ### Filtering properties: `filterProperty`
 
@@ -262,13 +273,13 @@ Format: `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZ
 * Specify `pr/MIN_PRICE MAX_PRICE` to find properties within a price range.
 * Both boundaries are inclusive.
 * `MIN_PRICE` must be a non-negative integer.
-* It does not matter which value is larger; the command will automatically determine the min and max.
+* `MIN_PRICE` must be smaller than or equal to `MAX_PRICE`.
 
 **Size Range Filtering:**
 * Specify `s/MIN_SIZE MAX_SIZE` to find properties within a size range.
 * Both boundaries are inclusive.
 * `MIN_SIZE` must be a non-negative integer.
-* It does not matter which value is larger; the command will automatically determine the min and max.
+* `MIN_SIZE` must be smaller than or equal to `MAX_SIZE`.
 
 Examples:
 
@@ -295,7 +306,7 @@ Examples:
 ### Deleting a client : `deleteClient`
 
 ![deleteClient](images/deleteClient.png)
-Deletes the specified client from the client list.
+Deletes the specified client from the client list and all of the client's properties from the property list.
 
 Format: `deleteClient INDEX`
 
@@ -306,8 +317,8 @@ Format: `deleteClient INDEX`
 
 Examples:
 
-* `list` followed by `deleteClient 2` deletes the 2nd client in the client list.
-* `filterClient n/Betsy` followed by `deleteClient 1` deletes the 1st client in the results of the `filterClient` command.
+* `list` followed by `deleteClient 2` deletes the 2nd client in the client list, as well as the 2nd client's properties.
+* `filterClient n/Betsy` followed by `deleteClient 1` deletes the 1st client in the results of the `filterClient` command, as well as the 1st client's properties.
 
 ### Deleting a property : `deleteProperty`
 
@@ -383,8 +394,8 @@ Action              | Format, Examples
 **Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`
 **Delete Property** | `deleteProperty INDEX`<br> e.g., `deleteProperty 3`
 **Edit Client**     | `editClient INDEX [n/NAME] [c/CONTACT] [e/EMAIL] [t/TAG]...`<br> e.g., `editClient 2 n/Alex Yeoh`
-**Edit Property**   | `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE]`<br> e.g., `editProperty 1 a/123 Clementi Road pr/500000 s/1200`
-**Filter Client**   | `filterClient n/KEYWORD [MORE_KEYWORDS]`<br> e.g., `filterClient n/James Jake`
+**Edit Property**   | `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE] [type/TYPE]`<br> e.g., `editProperty 1 a/123 Clementi Road pr/500000 s/1200 type/HDB`
+**Filter Client**   | `filterClient [n/NAME_KEYWORDS] [t/TAG_KEYWORDS]`<br> e.g., `filterClient n/James Jake t/friends`
 **Filter Property** | `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`<br> e.g., `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500`
 **List**            | `list`
 **Help**            | `help`

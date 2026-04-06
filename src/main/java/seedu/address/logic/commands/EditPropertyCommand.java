@@ -1,6 +1,10 @@
 package seedu.address.logic.commands;
 
 import static java.util.Objects.requireNonNull;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
 import java.util.LinkedHashSet;
 import java.util.List;
@@ -29,13 +33,22 @@ public class EditPropertyCommand extends Command {
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Edits the property identified "
             + "by the index number used in the displayed property list.\n"
             + "Parameters: INDEX (must be a positive integer) "
-            + "[a/ADDRESS] [pr/PRICE] [s/SIZE]\n"
-            + "Example: " + COMMAND_WORD + " 1 a/123 Clementi Road pr/500000 s/1200";
+            + "[" + PREFIX_ADDRESS + "ADDRESS] "
+            + "[" + PREFIX_PRICE + "PRICE] "
+            + "[" + PREFIX_SIZE + "SIZE] "
+            + "[" + PREFIX_TYPE + "TYPE]\n"
+            + "Example: " + COMMAND_WORD + " 1 "
+            + PREFIX_ADDRESS + "123 Clementi Road "
+            + PREFIX_PRICE + "500000 "
+            + PREFIX_SIZE + "1200 "
+            + PREFIX_TYPE + "HDB";
 
     public static final String MESSAGE_EDIT_PROPERTY_SUCCESS = "Edited Property: %1$s";
     public static final String MESSAGE_NOT_EDITED = "At least one field to edit must be provided.";
     public static final String MESSAGE_DUPLICATE_PROPERTY =
-            "This client already has another property with the same address.";
+            "Another property with the same address already exists.";
+    public static final String MESSAGE_PROPERTY_OWNER_NOT_FOUND =
+            "Property owner not found.";
     public static final String MESSAGE_NO_PROPERTIES =
             "No properties found. Please add a property first.";
 
@@ -71,6 +84,14 @@ public class EditPropertyCommand extends Command {
         Property propertyToEdit = lastShownPropertyList.get(index.getZeroBased());
         Property editedProperty = createEditedProperty(propertyToEdit, editPropertyDescriptor);
 
+        for (Person person : model.getAddressBook().getPersonList()) {
+            for (Property p : person.getProperties()) {
+                if (!p.equals(propertyToEdit) && p.isSameProperty(editedProperty)) {
+                    throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
+                }
+            }
+        }
+
         Person owner = null;
         for (Person person : model.getFilteredPersonList()) {
             if (person.getProperties().contains(propertyToEdit)) {
@@ -79,16 +100,12 @@ public class EditPropertyCommand extends Command {
             }
         }
 
-        // Invariant: each Property is stored under exactly one Person in the model,
-        // hence any property retrieved from the model must have a corresponding owner
-        assert owner != null : "Property must have an owner";
-
-        for (Property p : owner.getProperties()) {
-            if (!p.equals(propertyToEdit) && p.isSameProperty(editedProperty)) {
-                throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
-            }
+        if (owner == null) {
+            throw new CommandException(MESSAGE_PROPERTY_OWNER_NOT_FOUND);
         }
 
+        //@Liu Zhiyuan use chatgpt to help with writing next 8 lines
+        //to ensure the order of property will not be changed.
         Set<Property> updatedProperties = new LinkedHashSet<>();
         for (Property p : owner.getProperties()) {
             if (p.equals(propertyToEdit)) {
@@ -125,7 +142,7 @@ public class EditPropertyCommand extends Command {
         PropertyAddress updatedAddress = editPropertyDescriptor.getAddress().orElse(propertyToEdit.getAddress());
         Price updatedPrice = editPropertyDescriptor.getPrice().orElse(propertyToEdit.getPrice());
         Size updatedSize = editPropertyDescriptor.getSize().orElse(propertyToEdit.getSize());
-        PropertyType updatedType = propertyToEdit.getPropertyType();
+        PropertyType updatedType = editPropertyDescriptor.getType().orElse(propertyToEdit.getPropertyType());
         return new Property(updatedAddress, updatedPrice, updatedSize, updatedType);
     }
 
@@ -152,6 +169,7 @@ public class EditPropertyCommand extends Command {
         private PropertyAddress address;
         private Price price;
         private Size size;
+        private PropertyType type;
 
         public EditPropertyDescriptor() {
         }
@@ -163,13 +181,14 @@ public class EditPropertyCommand extends Command {
             setAddress(toCopy.address);
             setPrice(toCopy.price);
             setSize(toCopy.size);
+            setType(toCopy.type);
         }
 
         /**
          * Returns true if at least one field is edited.
          */
         public boolean isAnyFieldEdited() {
-            return CollectionUtil.isAnyNonNull(address, price, size);
+            return CollectionUtil.isAnyNonNull(address, price, size, type);
         }
 
         public void setAddress(PropertyAddress address) {
@@ -178,6 +197,10 @@ public class EditPropertyCommand extends Command {
 
         public Optional<PropertyAddress> getAddress() {
             return Optional.ofNullable(address);
+        }
+
+        public void setType(PropertyType type) {
+            this.type = type;
         }
 
         public void setPrice(Price price) {
@@ -196,6 +219,10 @@ public class EditPropertyCommand extends Command {
             return Optional.ofNullable(size);
         }
 
+        public Optional<PropertyType> getType() {
+            return Optional.ofNullable(type);
+        }
+
         @Override
         public boolean equals(Object other) {
             if (other == this) {
@@ -209,7 +236,8 @@ public class EditPropertyCommand extends Command {
             EditPropertyDescriptor otherDescriptor = (EditPropertyDescriptor) other;
             return Objects.equals(address, otherDescriptor.address)
                     && Objects.equals(price, otherDescriptor.price)
-                    && Objects.equals(size, otherDescriptor.size);
+                    && Objects.equals(size, otherDescriptor.size)
+                    && Objects.equals(type, otherDescriptor.type);
         }
     }
 }

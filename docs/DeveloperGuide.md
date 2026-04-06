@@ -162,25 +162,67 @@ This section describes some noteworthy details on how certain features are imple
 
 ### Add Property feature
 
-The add property feature allows users to add a property to a client identified by the index in the displayed client list.
-This is done by validating the property addition and updating the target client in the address book.
+The `addProperty` feature allows users to add a property to a client identified by the index in the displayed client list.
 
 The `AddPropertyCommand` is executed through the following flow:
 
-1. The command retrieves the currently displayed client list by calling `Model#getFilteredPersonList()`.
+1. The command retrieves the currently displayed client list using `Model#getFilteredPersonList()`.
 2. The target client is identified using the provided index.
 3. The command validates whether the property can be added to the target client.
-4. If the property addition is valid, `AddPropertyCommand` creates an updated `Person` object containing the new property.
-5. `AddPropertyCommand` calls `Model#setPerson(personToEdit, editedPerson)`.
-6. `ModelManager#setPerson(...)` updates the target client in the underlying `AddressBook`.
-7. The command returns a `CommandResult` after the target client has been updated.
+4. A new `Person` object is created with the new property added.
+5. The command calls `Model#setPerson(personToEdit, editedPerson)` to update the client.
+6. `ModelManager` updates the underlying `AddressBook`.
+7. The command returns a `CommandResult`.
 
-For simplicity, the sequence diagram below focuses on the main interactions involved in updating the target client
-and omits lower-level validation details such as index checks, duplicate ownership checks, and exception handling.
+For simplicity, the sequence diagram below focuses on the main interactions and omits lower-level validation details.
 
 The following sequence diagram illustrates the interactions:
 
 <puml src="diagrams/AddPropertySequenceDiagram.puml" alt="AddProperty sequence diagram" />
+
+### Edit Client feature
+
+The `editClient` feature allows users to update the details of an existing client identified by an index in the displayed client list.
+
+The `EditClientCommand` is executed through the following flow:
+
+1. The command retrieves the currently displayed client list using `Model#getFilteredPersonList()`.
+2. The target client is identified using the provided index.
+3. A new `Person` object is created with the updated fields.
+4. The command calls `Model#setPerson(personToEdit, editedPerson)` to update the client.
+5. `ModelManager` updates the underlying `AddressBook`.
+6. The command returns a `CommandResult`.
+
+If one or more `t/` prefixes are provided, the client’s existing tags are replaced. If `t/` is provided without a value, all existing tags are cleared.
+
+For simplicity, the sequence diagram below focuses on the main interactions involved in updating the client and omits lower-level validation details such as index checks and exception handling.
+
+The following sequence diagram illustrates the interactions:
+
+<puml src="diagrams/EditClientSequenceDiagram.puml" alt="EditClient sequence diagram" />
+
+### Edit Property feature
+
+The `editProperty` feature allows users to edit an existing property identified by its index in the displayed property list.
+
+The `EditPropertyCommand` is executed through the following flow:
+
+1. The command retrieves the currently displayed property list using `Model#getFilteredPropertyList()`.
+2. The target property is identified using the provided index.
+3. The command identifies the client who owns the target property.
+4. The property is updated through its owner.
+5. A new `Person` object is created with the updated property.
+6. The command calls `Model#setPerson(owner, editedPerson)` to update the client.
+7. `ModelManager` updates the underlying `AddressBook`.
+8. The command returns a `CommandResult`.
+
+Only the specified fields are updated. All other fields remain unchanged.
+
+For simplicity, the sequence diagram below focuses on the main interactions involved in editing a property and omits lower-level validation details such as index checks and exception handling.
+
+The following sequence diagram illustrates the interactions:
+
+<puml src="diagrams/EditPropertySequenceDiagram.puml" alt="EditProperty sequence diagram" />
 
 ### Delete Property feature
 

@@ -6,10 +6,10 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
 import static seedu.address.testutil.TypicalIndexes.INDEX_FIRST_PROPERTY;
 import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PROPERTY;
+import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.List;
 
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import seedu.address.commons.core.index.Index;
@@ -23,7 +23,6 @@ import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
 import seedu.address.model.property.Size;
 import seedu.address.testutil.TypicalIndexes;
-import seedu.address.testutil.TypicalPersons;
 
 /**
  * Contains integration tests (interaction with the Model) and unit tests for
@@ -31,12 +30,7 @@ import seedu.address.testutil.TypicalPersons;
  */
 public class DeletePropertyCommandTest {
 
-    private Model model;
-
-    @BeforeEach
-    public void setUp() {
-        model = new ModelManager(TypicalPersons.getTypicalAddressBook(), new UserPrefs());
-    }
+    private Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
     @Test
     public void execute_validIndexUnfilteredList_success() throws CommandException {

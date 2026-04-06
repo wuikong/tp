@@ -10,6 +10,7 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 import seedu.address.model.tag.Tag;
 import seedu.address.model.util.SampleDataUtil;
@@ -86,11 +87,12 @@ public class PersonBuilder {
     /**
      * Adds a property to the person being built.
      */
-    public PersonBuilder withProperty(String propertyAddress, String price, String size) {
+    public PersonBuilder withProperty(String propertyAddress, String price, String size, String type) {
         properties.add(new Property(
                 new PropertyAddress(propertyAddress),
                 new Price(price),
-                new Size(size)));
+                new Size(size),
+                new PropertyType(type)));
         return this;
     }
 

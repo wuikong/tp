@@ -21,8 +21,6 @@ public class SortPropertyCommand extends Command {
             + ": Sorts the displayed property list by the specified field "
             + "in the specified order.\n"
             + "Parameters: " + PREFIX_SORT_TYPE + "SORT_TYPE " + PREFIX_SORT_ORDER + "ORDER\n"
-            + "SORT_TYPE must be 'price' or 'size'.\n"
-            + "ORDER must be 'up' (ascending) or 'down' (descending).\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_SORT_TYPE + "price " + PREFIX_SORT_ORDER + "up";
 
     public static final String MESSAGE_SUCCESS = "Properties sorted by %1$s in %2$s order.";

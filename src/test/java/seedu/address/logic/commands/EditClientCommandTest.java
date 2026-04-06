@@ -12,6 +12,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.Set;
+import java.util.stream.Collectors;
 
 import org.junit.jupiter.api.Test;
 
@@ -27,8 +28,19 @@ import seedu.address.model.person.Phone;
 import seedu.address.model.tag.Tag;
 import seedu.address.testutil.PersonBuilder;
 
+/**
+ * Contains integration tests (interaction with the Model) for {@code EditClientCommand}.
+ */
 public class EditClientCommandTest {
     private final Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
+
+    private static String formatTags(Set<Tag> tags) {
+        return tags.stream()
+                .map(tag -> tag.tagName)
+                .sorted()
+                .map(tag -> "[" + tag + "]")
+                .collect(Collectors.joining());
+    }
 
     @Test
     public void execute_allFieldsSpecifiedUnfilteredList_success() {
@@ -47,7 +59,13 @@ public class EditClientCommandTest {
 
         EditClientCommand editCommand = new EditClientCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson);
+        String expectedMessage = String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personToEdit, editedPerson);
@@ -73,7 +91,13 @@ public class EditClientCommandTest {
 
         EditClientCommand editCommand = new EditClientCommand(indexLastPerson, descriptor);
 
-        String expectedMessage = String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson);
+        String expectedMessage = String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(lastPerson, editedPerson);
@@ -96,7 +120,13 @@ public class EditClientCommandTest {
 
         EditClientCommand editCommand = new EditClientCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson);
+        String expectedMessage = String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personToEdit, editedPerson);
@@ -119,7 +149,13 @@ public class EditClientCommandTest {
 
         EditClientCommand editCommand = new EditClientCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson);
+        String expectedMessage = String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personToEdit, editedPerson);
@@ -148,7 +184,13 @@ public class EditClientCommandTest {
 
         EditClientCommand editCommand = new EditClientCommand(INDEX_FIRST_PERSON, descriptor);
 
-        String expectedMessage = String.format(MESSAGE_EDIT_CLIENT_SUCCESS, editedPerson);
+        String expectedMessage = String.format(
+                MESSAGE_EDIT_CLIENT_SUCCESS,
+                editedPerson.getName(),
+                editedPerson.getPhone(),
+                editedPerson.getEmail(),
+                formatTags(editedPerson.getTags())
+        );
 
         Model expectedModel = new ModelManager(model.getAddressBook(), new UserPrefs());
         expectedModel.setPerson(personWithoutTags, editedPerson);

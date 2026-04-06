@@ -1,6 +1,7 @@
 package seedu.address.logic.parser;
 
 import static seedu.address.logic.Messages.MESSAGE_INVALID_COMMAND_FORMAT;
+import static seedu.address.logic.Messages.MESSAGE_INVALID_TYPE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
 import java.util.Arrays;
@@ -29,7 +30,14 @@ public class FilterTypeCommandParser implements Parser<FilterTypeCommand> {
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTypeCommand.MESSAGE_USAGE));
         }
 
+        argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_TYPE);
+
         if (argMultimap.getValue(PREFIX_TYPE).isEmpty()) {
+            throw new ParseException(
+                    String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTypeCommand.MESSAGE_USAGE));
+        }
+
+        if (argMultimap.getValue(PREFIX_TYPE).get().isBlank()) {
             throw new ParseException(
                     String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterTypeCommand.MESSAGE_USAGE));
         }
@@ -37,14 +45,15 @@ public class FilterTypeCommandParser implements Parser<FilterTypeCommand> {
         String type = argMultimap.getValue(PREFIX_TYPE).get();
         String[] typeKeywords = type.split("\\s+");
 
+        if (typeKeywords.length != 1) {
+            throw new ParseException(String.format(MESSAGE_INVALID_TYPE, FilterTypeCommand.MESSAGE_USAGE));
+        }
+
+        String keyword = typeKeywords[0].toLowerCase();
+        if (!keyword.equals("hdb") && !keyword.equals("condo")) {
+            throw new ParseException(String.format(MESSAGE_INVALID_TYPE, FilterTypeCommand.MESSAGE_USAGE));
+        }
+
         return new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(Arrays.asList(typeKeywords)));
     }
 }
-
-
-
-
-
-
-
-

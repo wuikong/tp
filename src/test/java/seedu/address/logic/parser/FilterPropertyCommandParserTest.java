@@ -50,7 +50,14 @@ public class FilterPropertyCommandParserTest {
                         5000));
 
         assertParseSuccess(parser, " a/Clementi pr/1000 10000 s/500 5000", expectedFilterPropertyCommand);
-        assertParseSuccess(parser, " a/Clementi pr/10000 1000 s/5000 500", expectedFilterPropertyCommand);
+    }
+
+    @Test
+    public void parse_reversedRangeArgs_throwsParseException() {
+        assertParseFailure(parser, " pr/10000 1000",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
+        assertParseFailure(parser, " s/5000 500",
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
     }
 
     @Test

@@ -1,5 +1,7 @@
 package seedu.address.model.property;
 
+import static java.util.Objects.requireNonNull;
+
 import java.util.List;
 import java.util.function.Predicate;
 
@@ -12,7 +14,11 @@ import seedu.address.commons.util.ToStringBuilder;
 public class PropertyTypeContainsKeywordsPredicate implements Predicate<Property> {
     private final List<String> keywords;
 
+    /**
+         * Constructs a {@code PropertyTypeContainsKeywordsPredicate} with the given keywords.
+     */
     public PropertyTypeContainsKeywordsPredicate(List<String> keywords) {
+        requireNonNull(keywords);
         this.keywords = keywords;
     }
 
@@ -42,7 +48,10 @@ public class PropertyTypeContainsKeywordsPredicate implements Predicate<Property
 
     @Override
     public String toString() {
-        return new ToStringBuilder(this).add("keywords", keywords).toString();
+
+        return new ToStringBuilder(this)
+                .add("keywords", keywords)
+                .toString();
     }
 }
 

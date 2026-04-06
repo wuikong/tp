@@ -24,7 +24,7 @@ public class AddPropertyCommand extends Command {
     public static final String COMMAND_WORD = "addProperty";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Adds a property to the client identified "
-            + "by the index number used in the displayed person list. "
+            + "by the index number used in the displayed person list. \n"
             + "Parameters: "
             + PREFIX_LISTING_INDEX + "CLIENT_INDEX "
             + PREFIX_ADDRESS + "ADDRESS "
@@ -90,7 +90,7 @@ public class AddPropertyCommand extends Command {
             throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
         }
 
-        for (Person person : model.getFilteredPersonList()) {
+        for (Person person : model.getAddressBook().getPersonList()) {
             if (!person.equals(personToEdit) && person.getProperties().contains(property)) {
                 throw new CommandException(MESSAGE_PROPERTY_ALREADY_OWNED);
             }
