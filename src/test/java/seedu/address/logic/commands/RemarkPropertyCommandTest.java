@@ -1,5 +1,6 @@
 package seedu.address.logic.commands;
 
+import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static seedu.address.logic.commands.CommandTestUtil.assertCommandFailure;
@@ -9,6 +10,7 @@ import static seedu.address.testutil.TypicalIndexes.INDEX_SECOND_PERSON;
 import static seedu.address.testutil.TypicalPersons.getTypicalAddressBook;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.junit.jupiter.api.Test;
@@ -62,7 +64,7 @@ public class RemarkPropertyCommandTest {
     @Test
     public void execute_validIndexAndRemark_success() {
         Model model = createModelWithPersonWithProperty();
-        // filter to the person with a property, as viewProperty would do
+
         model.updateFilteredPersonList(p -> !p.getProperties().isEmpty());
 
         RemarkPropertyCommand command = new RemarkPropertyCommand(INDEX_FIRST_PERSON, VALID_REMARK);
@@ -111,7 +113,7 @@ public class RemarkPropertyCommandTest {
     @Test
     public void execute_noPersonInFilteredList_failure() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        // filter to empty list
+
         model.updateFilteredPersonList(p -> false);
 
         RemarkPropertyCommand command = new RemarkPropertyCommand(INDEX_FIRST_PERSON, VALID_REMARK);
@@ -122,7 +124,6 @@ public class RemarkPropertyCommandTest {
     @Test
     public void execute_personHasNoProperties_failure() {
         Model model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
-        // ALICE in typical address book has no properties
         model.updateFilteredPersonList(p -> p.getName().fullName.equals("Alice Pauline"));
 
         RemarkPropertyCommand command = new RemarkPropertyCommand(INDEX_FIRST_PERSON, VALID_REMARK);
@@ -135,7 +136,6 @@ public class RemarkPropertyCommandTest {
         Model model = createModelWithPersonWithProperty();
         model.updateFilteredPersonList(p -> !p.getProperties().isEmpty());
 
-        // only 1 property, so index 2 is out of bounds
         RemarkPropertyCommand command = new RemarkPropertyCommand(INDEX_SECOND_PERSON, VALID_REMARK);
 
         assertCommandFailure(command, model, Messages.MESSAGE_INVALID_PROPERTY_DISPLAYED_INDEX);
@@ -165,5 +165,37 @@ public class RemarkPropertyCommandTest {
 
         // different remark -> returns false
         assertFalse(firstCommand.equals(differentRemarkCommand));
+    }
+
+    @Test
+    public void execute_multipleProperties_onlyTargetPropertyUpdated() throws Exception {
+        Property secondProperty = new Property(
+                new PropertyAddress("456 Other Street"),
+                new Price("800000"),
+                new Size("1500"),
+                new PropertyType("Condo")
+        );
+
+        AddressBook ab = new AddressBook();
+        Set<Property> properties = new LinkedHashSet<>(); // preserves order
+        properties.add(VALID_PROPERTY);
+        properties.add(secondProperty);
+        Person person = new PersonBuilder().withName("Alice Pauline")
+                .withPhone("94351253").withEmail("alice@example.com")
+                .withTags("friends").withProperties(properties).build();
+        ab.addPerson(person);
+        Model model = new ModelManager(ab, new UserPrefs());
+
+        RemarkPropertyCommand command = new RemarkPropertyCommand(INDEX_FIRST_PERSON, VALID_REMARK);
+        command.execute(model);
+
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(VALID_REMARK, model.getFilteredPropertyList().get(0).getRemarks());
+
+        Person updatedPerson = model.getFilteredPersonList().get(0);
+        assertEquals(2, updatedPerson.getProperties().size());
+        assertTrue(updatedPerson.getProperties().stream()
+                .anyMatch(p -> p.getAddress().equals(secondProperty.getAddress())
+                        && p.getRemarks() == null));
     }
 }
