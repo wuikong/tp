@@ -385,44 +385,54 @@ _{Explain here how the data archiving feature will be implemented}_
 
 ### Target user profile:
 
-Tech-savvy property agents in Singapore who handle transactions and manage multiple buyers/sellers concurrently. They rely on fast retrieval of key client + property details during time-sensitive interactions (calls, viewings, negotiations) and prefer a keyboard-centric workflow over mouse-heavy CRM tools
+* requires way to handle multiple clients and properties concurrently without losing track of key details (e.g., unit size, asking price, buyer requirements) during time-sensitive interactions (calls, viewings, negotiations)
+* needs to quickly recall client and property details without navigating through multiple screens or mouse-heavy CRM tools
+* tech-savvy property agents
+* types fast
+* comfortable using CLI apps
 
 ### Value Proposition:
 
 ClientVault enables Singapore residential property agents to capture, organize, and retrieve client + property details in seconds through a fast, keyboard-driven interface. This reduces the friction of searching across chat logs and spreadsheets when handling daily tasks such as:
 
+* managing client contacts and roles (buyer/seller)
 * recalling unit details (flat type / size / bedrooms / lease remaining)
 * tracking buyer requirements (budget, location, preferred property type)
 * quickly matching buyers to suitable seller listings.
 
 ### User stories
 
-Priorities: High (must have) - `* * * *`, Medium (nice to have) - `* * *`, Low (unlikely to have) - `* *`, Excluded - `*`
+Priorities: High (must have) - `* * *`, Medium (nice to have) - `* *`, Low (unlikely to have) - `*`
 
 
-| Priority | As a …           | I want to …                 | So that I can…                                 |
-|-----|------------------| ------------------------------ |------------------------------------------------|
-| `* * * *` | property agent   | add a client with contact details and role (buyer/seller)       | retrieve them quickly during calls             |
-| `* * * *` | property agent   | view a client’s full profile using a command             | reference key details instantly                |
-| `* * * *` | property agent   | remove clients who are no longer buying/selling property             | reduce clutter                                 |
-| `* * * *` | property agent   | add a property listing with details (HDB/Condo, location, size, bedrooms, asking price, lease remaining)        | store the listings centrally                   |
-| `* * * *` | property agent   | list all active property listings  | quickly scan what I have available             |
-| `* * * *` | property agent   | delete property listings that have just been transacted         | reduce clutter                                 |
-| `* * *` | property agent   | find listings that match a buyer’s requirements (budget/type/location)             | suggest suitable homes quickly                 |
-| `* * *` | property agent   | update buyer requirements (budget, preferred location, type, min bedrooms)             | ensure matches remain accurate                 |
-| `* * *` | property agent   | update listing details (asking price, status, lease remaining)        | ensure information stays current               |
-| `* * *` | property agent   | see a compact summary (type, size, bedrooms, lease, price)  | answer quickly without opening multiple fields |
-| `* * *` | property agent   | use keyboard-friendly commands and aliases         | operate quickly without a mouse                |
-| `* *` | property agent   |  tag clients/listings (e.g., “urgent”, “hot lead”, “near MRT”)        | filter and prioritise easily                   |
-| `* *` | property agent   | set follow-up reminders  | stay on top of deadlines and next steps        |
-| `* *` | property agent   | record seller viewing time windows         | make scheduling smoother                       |
-| `*` | property agent   | export a client or listing summary         | share it with clients or teammates                                              |
+| Priority | As a …           | I want to …                                                                                              | So that I can…                                                      |
+|----------|------------------|----------------------------------------------------------------------------------------------------------|---------------------------------------------------------------------|
+| `* * *`  | property agent   | add a client with contact details and role (buyer/seller)                                                | retrieve them quickly during calls                                  |
+| `* * *`  | property agent   | view a client’s full profile using a command                                                             | reference key details instantly                                     |
+| `* * *`  | property agent   | remove clients who are no longer buying/selling property                                                 | reduce clutter                                                      |
+| `* * *`  | property agent   | add a property listing with details (HDB/Condo, location, size, bedrooms, asking price, lease remaining) | store the listings centrally                                        |
+| `* * *`  | property agent   | list all active property listings                                                                        | quickly scan what I have available                                  |
+| `* * *`  | property agent   | view a property's full details using a command                                                           | reference key details instantly                                     |
+| `* * *`  | property agent   | delete property listings that have just been transacted                                                  | reduce clutter                                                      |
+| `* *`    | property agent   | find listings that match a buyer’s requirements (budget/type/location)                                   | suggest suitable homes quickly                                      |
+| `* *`    | property agent   | update buyer requirements (budget, preferred location, type, min bedrooms)                               | ensure matches remain accurate                                      |
+| `* *`    | property agent   | modify any client details without re-adding them                                                         | quickly correct mistakes and keep information updated               |
+| `* *`    | property agent   | view a specific property's owner                                                                         | contact the seller quickly when there is a offer for their property |
+| `* *`    | property agent   | update listing details (asking price, status, lease remaining)                                           | ensure information stays current                                    |
+| `* *`    | property agent   | see a compact summary (type, size, bedrooms, lease, price)                                               | answer quickly without opening multiple fields                      |
+| `* *`    | property agent   | use keyboard-friendly commands and aliases                                                               | operate quickly without a mouse                                     |
+| `* *`    | property agent   | tag property listings (e.g., “urgent”, “hot lead”, “near MRT”)                                           | input important remarks or features of the property                 |
+| `*`      | property agent   | set follow-up reminders                                                                                  | stay on top of deadlines and next steps                             |
+| `*`      | property agent   | record seller viewing time windows                                                                       | make scheduling smoother                                            |
+| `*`      | property agent   | export a client or listing summary                                                                       | share it with clients or teammates                                  |
 
 *{More to be added}*
 
 ## Use Cases
 
-**Use Case 1: Adding a new client followed by new listing under said client**
+Note: For all use cases, the System is `ClientVault` and the Actor is the `Property Agent`, unless specified otherwise
+
+**Use Case 1: Adding a new client**
 
 Actor: Residential Property Agent(John)
 
