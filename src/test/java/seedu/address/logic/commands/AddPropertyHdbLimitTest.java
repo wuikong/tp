@@ -139,29 +139,4 @@ public class AddPropertyHdbLimitTest {
 
         assertTrue(result.getFeedbackToUser().contains("New property added"));
     }
-
-    @Test
-    public void execute_propertyWithoutTypeNotLimited_success() throws CommandException {
-        // Property without a type should not trigger HDB limit
-        Property propertyNoType = new Property(
-                new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"),
-                new Size("1200")
-        );
-        Property propertyNoType2 = new Property(
-                new PropertyAddress("312 Clementi Ave 2, #02-25"),
-                new Price("1200000"),
-                new Size("1200")
-        );
-
-        // Add first property without type
-        AddPropertyCommand addCommand1 = new AddPropertyCommand(INDEX_FIRST_PERSON, propertyNoType);
-        addCommand1.execute(model);
-
-        // Add second property without type - should succeed
-        AddPropertyCommand addCommand2 = new AddPropertyCommand(INDEX_FIRST_PERSON, propertyNoType2);
-        CommandResult result = addCommand2.execute(model);
-
-        assertTrue(result.getFeedbackToUser().contains("New property added"));
-    }
 }

@@ -58,7 +58,7 @@ public class DeleteClientCommandTest {
     @Test
     public void execute_unfilteredListHasProperties_success() throws CommandException {
         Property propertyToAdd = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"), new Size("1200"));
+                new Price("1200000"), new Size("1200"), new PropertyType("HDB"));
         AddPropertyCommand addPropertyCommand = new AddPropertyCommand(INDEX_FIRST_PERSON, propertyToAdd);
         addPropertyCommand.execute(model);
 

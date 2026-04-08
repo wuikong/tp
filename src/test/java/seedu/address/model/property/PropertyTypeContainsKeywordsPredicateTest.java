@@ -13,6 +13,7 @@ public class PropertyTypeContainsKeywordsPredicateTest {
     private final PropertyAddress validAddress = new PropertyAddress("123 Main Street");
     private final Price validPrice = new Price("500000");
     private final Size validSize = new Size("1200");
+    private final PropertyType validType = new PropertyType("HDB");
 
     @Test
     public void test_propertyTypeContainsKeywords_returnsTrue() {
@@ -48,13 +49,6 @@ public class PropertyTypeContainsKeywordsPredicateTest {
         // Keywords match name, but does not match property type
         predicate = new PropertyTypeContainsKeywordsPredicate(Arrays.asList("Main", "Street"));
         assertFalse(predicate.test(new Property(validAddress, validPrice, validSize, new PropertyType("HDB"))));
-    }
-
-    @Test
-    public void test_propertyTypeIsNull_returnsFalse() {
-        PropertyTypeContainsKeywordsPredicate predicate =
-                new PropertyTypeContainsKeywordsPredicate(Arrays.asList("HDB"));
-        assertFalse(predicate.test(new Property(validAddress, validPrice, validSize)));
     }
 
     @Test

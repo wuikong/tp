@@ -13,7 +13,7 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.PersonMatchesFilterPredicate;
 
 /**
- * Parses input arguments and creates a new FilterClientCommand object
+ * Parses input arguments and creates a new FilterClientCommand object.
  */
 public class FilterClientCommandParser implements Parser<FilterClientCommand> {
 
@@ -27,49 +27,41 @@ public class FilterClientCommandParser implements Parser<FilterClientCommand> {
         ArgumentMultimap argMultimap =
                 ArgumentTokenizer.tokenize(args, PREFIX_NAME, PREFIX_TAG);
 
-        if (!argMultimap.getPreamble().isEmpty()) {
-            throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterClientCommand.MESSAGE_USAGE));
-        }
-
-        if (argMultimap.getValue(PREFIX_NAME).isEmpty() && argMultimap.getValue(PREFIX_TAG).isEmpty()) {
+        if (!argMultimap.getPreamble().isEmpty()
+                || (argMultimap.getValue(PREFIX_NAME).isEmpty() && argMultimap.getValue(PREFIX_TAG).isEmpty())) {
             throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT, FilterClientCommand.MESSAGE_USAGE));
         }
 
         argMultimap.verifyNoDuplicatePrefixesFor(PREFIX_NAME, PREFIX_TAG);
 
-        List<String> nameKeywords = Collections.emptyList();
-        if (argMultimap.getValue(PREFIX_NAME).isPresent()) {
-            String name = argMultimap.getValue(PREFIX_NAME).get().trim();
-            if (name.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        FilterClientCommand.MESSAGE_USAGE));
-            }
-
-            String[] parsedNameKeywords = name.split("\\s+");
-            for (String nameKeyword : parsedNameKeywords) {
-                // Use ParserUtil to validate name keywords
-                ParserUtil.parseName(nameKeyword);
-            }
-            nameKeywords = Arrays.asList(parsedNameKeywords);
-        }
-
-        List<String> tagKeywords = Collections.emptyList();
-        if (argMultimap.getValue(PREFIX_TAG).isPresent()) {
-            String tag = argMultimap.getValue(PREFIX_TAG).get().trim();
-            if (tag.isEmpty()) {
-                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
-                        FilterClientCommand.MESSAGE_USAGE));
-            }
-
-            String[] parsedTagKeywords = tag.split("\\s+");
-            for (String tagKeyword : parsedTagKeywords) {
-                // Use ParserUtil to validate tag keywords
-                ParserUtil.parseTag(tagKeyword);
-            }
-            tagKeywords = Arrays.asList(parsedTagKeywords);
-        }
+        List<String> nameKeywords = parseKeywords(argMultimap, PREFIX_NAME);
+        List<String> tagKeywords = parseKeywords(argMultimap, PREFIX_TAG);
 
         return new FilterClientCommand(new PersonMatchesFilterPredicate(nameKeywords, tagKeywords));
     }
 
+    private List<String> parseKeywords(ArgumentMultimap argMultimap, Prefix prefix) throws ParseException {
+        List<String> keywords = Collections.emptyList();
+        if (argMultimap.getValue(prefix).isPresent()) {
+            String input = argMultimap.getValue(prefix).get().trim();
+            if (input.isEmpty()) {
+                throw new ParseException(String.format(MESSAGE_INVALID_COMMAND_FORMAT,
+                        FilterClientCommand.MESSAGE_USAGE));
+            }
+
+            keywords = Arrays.asList(input.split("\\s+"));
+
+            // Keyword validation using ParserUtil methods
+            if (prefix.equals(PREFIX_NAME)) {
+                for (String keyword : keywords) {
+                    ParserUtil.parseName(keyword);
+                }
+            } else if (prefix.equals(PREFIX_TAG)) {
+                for (String keyword : keywords) {
+                    ParserUtil.parseTag(keyword);
+                }
+            }
+        }
+        return keywords;
+    }
 }

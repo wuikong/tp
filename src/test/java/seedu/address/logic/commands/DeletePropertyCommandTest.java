@@ -21,6 +21,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 import seedu.address.testutil.TypicalIndexes;
 
@@ -36,7 +37,7 @@ public class DeletePropertyCommandTest {
     public void execute_validIndexUnfilteredList_success() throws CommandException {
         // Add a property to test
         Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"), new Size("1200"));
+                new Price("1200000"), new Size("1200"), new PropertyType("HDB"));
         AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                 testProperty);
         addPropertyCommand.execute(model);
@@ -59,7 +60,7 @@ public class DeletePropertyCommandTest {
     public void execute_invalidIndexUnfilteredList_throwsCommandException() {
         // Add a property first
         Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"), new Size("1200"));
+                new Price("1200000"), new Size("1200"), new PropertyType("HDB"));
         try {
             AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                     testProperty);
@@ -86,9 +87,9 @@ public class DeletePropertyCommandTest {
     public void execute_deleteMultipleProperties_success() throws CommandException {
         // Add two properties
         Property property1 = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"), new Size("1200"));
-        Property property2 = new Property(new PropertyAddress("412 Clementi Ave 3, #03-25"),
-                new Price("1500000"), new Size("1500"));
+                new Price("1200000"), new Size("1200"), new PropertyType("HDB"));
+        Property property2 = new Property(new PropertyAddress("The CasaNova Pasir Panjang, #03-25"),
+                new Price("1500000"), new Size("1500"), new PropertyType("Condo"));
 
         AddPropertyCommand addPropertyCommand1 = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                 property1);
@@ -114,7 +115,7 @@ public class DeletePropertyCommandTest {
         // This test covers the edge case where a property exists but has no owner in the filtered list
         // Add a property to the first person
         Property testProperty = new Property(new PropertyAddress("311 Clementi Ave 2, #02-25"),
-                new Price("1200000"), new Size("1200"));
+                new Price("1200000"), new Size("1200"), new PropertyType("HDB"));
         AddPropertyCommand addPropertyCommand = new AddPropertyCommand(TypicalIndexes.INDEX_FIRST_PERSON,
                 testProperty);
         addPropertyCommand.execute(model);

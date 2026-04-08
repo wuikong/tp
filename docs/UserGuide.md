@@ -84,7 +84,7 @@ Examples:
 ![addProperty](images/addProperty.png)
 Adds a property to the client identified by the index number in the displayed client list.
 
-Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
+Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE type/TYPE`
 
 <box type="tip" seamless>
 
@@ -92,7 +92,7 @@ Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
 
 - Use the `list` command to view the indices of clients before adding a property.
 - Each property can only belong to one client.
-- The `type/TYPE` field is optional.
+- The `type/TYPE` field is case insensitive, ie: hdb or HDB accepted.
 
 </box>
 
@@ -107,7 +107,7 @@ Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]`
 Examples:
 
 * `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
-* `addProperty i/2 a/10 Orchard Road pr/2500000 s/1800`
+* `addProperty i/2 a/97 Panji Panji Road pr/2500000 s/1800 type/Condo`
 
 ### Listing all clients and their properties : `list`
 
@@ -199,7 +199,7 @@ Examples:
 Adds a remark to the property at the specified INDEX.
 Existing remarks will be overwritten by the new remark.
 
-Format: `remarkProperty INDEX i/PROPERTY_INDEX r/REMARK`
+Format: `remarkProperty PROPERTY_INDEX r/REMARK`
 
 * The index **must be a positive integer** 1, 2, 3, …
 * Remarks cannot be changed by editProperty
@@ -210,8 +210,8 @@ Format: `remarkProperty INDEX i/PROPERTY_INDEX r/REMARK`
 
 Examples:
 
-* `remarkProperty 1 i/1 r/Needs renovation before move-in` adds said remark to the 1st property of the 1st client
-* `remarkProperty 2 i/1 r/Near Chinese Garden MRT`
+* `remarkProperty 1 r/Needs renovation before move-in` adds said remark to the 1st property
+* `remarkProperty 2 r/Near Chinese Garden MRT` adds said remark to the 2nd property
 
 ### Filtering clients by name and/or tag: `filterClient`
 
@@ -387,8 +387,8 @@ _Details coming soon ..._
 
 Action              | Format, Examples
 --------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------
-**Add Client**      | `addClient n/NAME c/CONTACT e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho c/22224444 e/jamesho@example.com t/vip`
-**Add Property**    | `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE [type/TYPE]` <br> e.g., `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
+**Add Client**      | `addClient n/NAME c/CONTACT e/EMAIL [t/TAG]…​` <br> e.g., `add n/James Ho c/22224444 e/jamesho@example.com t/friend t/colleague`
+**Add Property**    | `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE type/TYPE` <br> e.g., `addProperty i/1 a/311 Clementi Ave 2, #02-25 pr/1200000 s/1200 type/HDB`
 **Clear**           | `clear`
 **Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`
 **Delete Property** | `deleteProperty INDEX`<br> e.g., `deleteProperty 3`
@@ -398,4 +398,4 @@ Action              | Format, Examples
 **Filter Property** | `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`<br> e.g., `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500`
 **List**            | `list`
 **Help**            | `help`
-**Remark Property** | `remarkProperty CLIENT_INDEX i/PROPERTY_INDEX r/REMARKS` <br> e.g., `remarkProperty 2 i/1 r/Near Chinese Garden MRT`
+**Remark Property** | `remarkProperty PROPERTY_INDEX  r/REMARKS` <br> e.g., `remarkProperty 2 r/Near Chinese Garden MRT`

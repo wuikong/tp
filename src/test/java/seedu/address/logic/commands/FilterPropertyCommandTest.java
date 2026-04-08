@@ -23,6 +23,7 @@ import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
 import seedu.address.model.property.PropertyMatchesFilterPredicate;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 
 /**
@@ -141,7 +142,8 @@ public class FilterPropertyCommandTest {
 
     private void addPropertyToModel(Model model, Index index, String address, String price, String size)
             throws Exception {
-        Property property = new Property(new PropertyAddress(address), new Price(price), new Size(size));
+        Property property = new Property(new PropertyAddress(address), new Price(price), new Size(size),
+                    new PropertyType("Condo"));
         new AddPropertyCommand(index, property).execute(model);
     }
 }

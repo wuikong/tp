@@ -24,10 +24,12 @@ public class AddPropertyCommandParserTest {
     private static final String VALID_ADDRESS = "311 Clementi Ave 2, #02-25";
     private static final String VALID_PRICE = "1200000";
     private static final String VALID_SIZE = "1200";
+    private static final String VALID_TYPE = "HDB";
 
     private static final String INVALID_ADDRESS = "@123";
     private static final String INVALID_PRICE = "abc";
     private static final String INVALID_SIZE = "abc";
+    private static final String INVALID_TYPE = "Landed";
 
     private AddPropertyCommandParser parser = new AddPropertyCommandParser();
 
@@ -37,12 +39,14 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
 
         Property property = new Property(
                 new PropertyAddress(VALID_ADDRESS),
                 new Price(VALID_PRICE),
-                new Size(VALID_SIZE));
+                new Size(VALID_SIZE),
+                new PropertyType(VALID_TYPE));
         AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -53,8 +57,8 @@ public class AddPropertyCommandParserTest {
         String userInput = " "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
-
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
         assertParseFailure(parser, userInput,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
     }
@@ -64,7 +68,8 @@ public class AddPropertyCommandParserTest {
         String userInput = " "
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;;
 
         assertParseFailure(parser, userInput,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
@@ -75,7 +80,8 @@ public class AddPropertyCommandParserTest {
         String userInput = " "
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;;
 
         assertParseFailure(parser, userInput,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
@@ -83,6 +89,18 @@ public class AddPropertyCommandParserTest {
 
     @Test
     public void parse_missingSize_failure() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "1 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_TYPE + VALID_TYPE;
+
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_missingType_failure() {
         String userInput = " "
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
@@ -105,7 +123,8 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + INVALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
 
         assertParseFailure(parser, userInput, PropertyAddress.MESSAGE_CONSTRAINTS);
     }
@@ -116,7 +135,8 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + INVALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
 
         assertParseFailure(parser, userInput, Price.MESSAGE_CONSTRAINTS);
     }
@@ -127,7 +147,8 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + INVALID_SIZE;
+                + PREFIX_SIZE + INVALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
 
         assertParseFailure(parser, userInput, Size.MESSAGE_CONSTRAINTS);
     }
@@ -145,7 +166,7 @@ public class AddPropertyCommandParserTest {
                 new PropertyAddress(VALID_ADDRESS),
                 new Price(VALID_PRICE),
                 new Size(VALID_SIZE),
-                new PropertyType("HDB"));
+                new PropertyType(VALID_TYPE));
         AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
 
         assertParseSuccess(parser, userInput, expectedCommand);
@@ -158,7 +179,7 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
                 + PREFIX_SIZE + VALID_SIZE + " "
-                + PREFIX_TYPE + "@@@invalid";
+                + PREFIX_TYPE + INVALID_TYPE;
 
         assertParseFailure(parser, userInput, PropertyType.MESSAGE_CONSTRAINTS);
     }
@@ -169,7 +190,8 @@ public class AddPropertyCommandParserTest {
                 + PREFIX_LISTING_INDEX + "1 "
                 + PREFIX_ADDRESS + VALID_ADDRESS + " "
                 + PREFIX_PRICE + VALID_PRICE + " "
-                + PREFIX_SIZE + VALID_SIZE;
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
 
         assertParseFailure(parser, userInput,
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
@@ -178,21 +200,21 @@ public class AddPropertyCommandParserTest {
     @Test
     public void parse_repeatedAddress_failure() {
         assertParseFailure(parser,
-                " i/1 a/311 Clementi Ave 2 a/222 Bedok North pr/1200000 s/1200",
+                " i/1 a/311 Clementi Ave 2 a/222 Bedok North pr/1200000 s/1200 type/HDB",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_repeatedPrice_failure() {
         assertParseFailure(parser,
-                " i/1 a/311 Clementi Ave 2 pr/1200000 pr/1300000 s/1200",
+                " i/1 a/311 Clementi Ave 2 pr/1200000 pr/1300000 s/1200 type/HDB",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
     }
 
     @Test
     public void parse_repeatedSize_failure() {
         assertParseFailure(parser,
-                " i/1 a/311 Clementi Ave 2 pr/1200000 s/1200 s/1300",
+                " i/1 a/311 Clementi Ave 2 pr/1200000 s/1200 s/1300 type/HDB",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
     }
 
@@ -201,5 +223,99 @@ public class AddPropertyCommandParserTest {
         assertParseFailure(parser,
                 " i/1 a/311 Clementi Ave 2 pr/1200000 s/1200 type/HDB type/Condo",
                 String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_duplicateType_failure() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "1 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + "HDB "
+                + PREFIX_TYPE + "Condo";
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_typeLowercase_success() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "1 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + "hdb";
+
+        Property property = new Property(
+                new PropertyAddress(VALID_ADDRESS),
+                new Price(VALID_PRICE),
+                new Size(VALID_SIZE),
+                new PropertyType("hdb")); // normalises to "HDB" internally
+        AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_typeCondoVariants_success() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "1 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + "condo";
+
+        Property property = new Property(
+                new PropertyAddress(VALID_ADDRESS),
+                new Price(VALID_PRICE),
+                new Size(VALID_SIZE),
+                new PropertyType("condo")); // normalises to "Condo" internally
+        AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
+    }
+
+    @Test
+    public void parse_invalidIndex_failure() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "0 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_nonNumericIndex_failure() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "abc "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + VALID_TYPE;
+        assertParseFailure(parser, userInput,
+                String.format(MESSAGE_INVALID_COMMAND_FORMAT, AddPropertyCommand.MESSAGE_USAGE));
+    }
+
+    @Test
+    public void parse_typeCondoSuccess() {
+        String userInput = " "
+                + PREFIX_LISTING_INDEX + "1 "
+                + PREFIX_ADDRESS + VALID_ADDRESS + " "
+                + PREFIX_PRICE + VALID_PRICE + " "
+                + PREFIX_SIZE + VALID_SIZE + " "
+                + PREFIX_TYPE + "Condo";
+
+        Property property = new Property(
+                new PropertyAddress(VALID_ADDRESS),
+                new Price(VALID_PRICE),
+                new Size(VALID_SIZE),
+                new PropertyType("Condo"));
+        AddPropertyCommand expectedCommand = new AddPropertyCommand(Index.fromOneBased(1), property);
+
+        assertParseSuccess(parser, userInput, expectedCommand);
     }
 }

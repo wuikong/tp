@@ -28,8 +28,7 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
      */
     @Override
     public FilterPropertyCommand parse(String args) throws ParseException {
-        ArgumentMultimap argMultimap =
-                ArgumentTokenizer.tokenize(args, PREFIX_ADDRESS, PREFIX_PRICE, PREFIX_SIZE);
+        ArgumentMultimap argMultimap = ArgumentTokenizer.tokenize(args, PREFIX_ADDRESS, PREFIX_PRICE, PREFIX_SIZE);
 
         if (!argMultimap.getPreamble().isEmpty()) {
             throw new ParseException(String.format(
@@ -42,28 +41,26 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
                 .map(this::parseAddressKeywords)
                 .orElse(List.of());
 
-        Optional<long[]> priceRange = Optional.empty();
+        Optional<long[]> optionalPriceRange = Optional.empty();
         if (argMultimap.getValue(PREFIX_PRICE).isPresent()) {
-            priceRange = Optional.of(parsePriceRange(argMultimap.getValue(PREFIX_PRICE).get()));
+            optionalPriceRange = parseRange(argMultimap.getValue(PREFIX_PRICE).get(), PREFIX_PRICE);
         }
 
-        Optional<long[]> sizeRange = Optional.empty();
+        Optional<long[]> optionalSizeRange = Optional.empty();
         if (argMultimap.getValue(PREFIX_SIZE).isPresent()) {
-            sizeRange = Optional.of(parseSizeRange(argMultimap.getValue(PREFIX_SIZE).get()));
+            optionalSizeRange = parseRange(argMultimap.getValue(PREFIX_SIZE).get(), PREFIX_SIZE);
         }
 
-        if (addressKeywords.isEmpty() && priceRange.isEmpty() && sizeRange.isEmpty()) {
+        if (addressKeywords.isEmpty() && optionalPriceRange.isEmpty() && optionalSizeRange.isEmpty()) {
             throw new ParseException(String.format(
                     MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
         }
 
-        long minPrice = priceRange.map(range -> range[0]).orElse(Long.valueOf(0));
-        long maxPrice = priceRange.map(range -> range[1]).orElse(Long.MAX_VALUE);
-        long minSize = sizeRange.map(range -> range[0]).orElse(Long.valueOf(0));
-        long maxSize = sizeRange.map(range -> range[1]).orElse(Long.MAX_VALUE);
+        long[] priceRange = optionalPriceRange.orElse(new long[] {0, Long.MAX_VALUE});
+        long[] sizeRange = optionalSizeRange.orElse(new long[] {0, Long.MAX_VALUE});
 
         return new FilterPropertyCommand(new PropertyMatchesFilterPredicate(
-                addressKeywords, minPrice, maxPrice, minSize, maxSize));
+                addressKeywords, priceRange[0], priceRange[1], sizeRange[0], sizeRange[1]));
     }
 
     private List<String> parseAddressKeywords(String rawAddress) {
@@ -72,15 +69,7 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
                 .collect(Collectors.toList());
     }
 
-    private long[] parsePriceRange(String rawPriceRange) throws ParseException {
-        return parseRange(rawPriceRange, true);
-    }
-
-    private long[] parseSizeRange(String rawSizeRange) throws ParseException {
-        return parseRange(rawSizeRange, false);
-    }
-
-    private long[] parseRange(String rawRange, boolean isPriceRange) throws ParseException {
+    private Optional<long[]> parseRange(String rawRange, Prefix prefix) throws ParseException {
         String[] parts = rawRange.trim().split("\\s+");
 
         if (parts.length != 2 || parts[0].isBlank() || parts[1].isBlank()) {
@@ -88,23 +77,26 @@ public class FilterPropertyCommandParser implements Parser<FilterPropertyCommand
                     MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
         }
 
-        long first = parseNumericBoundary(parts[0], isPriceRange);
-        long second = parseNumericBoundary(parts[1], isPriceRange);
+        long first = parseNumericBoundary(parts[0], prefix);
+        long second = parseNumericBoundary(parts[1], prefix);
         if (first > second) {
             throw new ParseException(String.format(
                     MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
         }
 
-        return new long[] {first, second};
+        return Optional.of(new long[] {first, second});
     }
 
-    private long parseNumericBoundary(String rawValue, boolean isPriceRange) throws ParseException {
-        if (isPriceRange) {
+    private long parseNumericBoundary(String rawValue, Prefix prefix) throws ParseException {
+        if (prefix.equals(PREFIX_PRICE)) {
             Price price = ParserUtil.parsePrice(rawValue);
             return Long.parseLong(price.value);
         }
-
-        Size size = ParserUtil.parseSize(rawValue);
-        return Long.parseLong(size.value);
+        if (prefix.equals(PREFIX_SIZE)) {
+            Size size = ParserUtil.parseSize(rawValue);
+            return Long.parseLong(size.value);
+        }
+        throw new ParseException(String.format(
+                MESSAGE_INVALID_COMMAND_FORMAT, FilterPropertyCommand.MESSAGE_USAGE));
     }
 }

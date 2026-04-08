@@ -22,6 +22,7 @@ import seedu.address.model.person.Person;
 import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 
 /**
@@ -33,13 +34,15 @@ public class AddPropertyCommandTest {
     private Property validProperty = new Property(
             new PropertyAddress("311 Clementi Ave 2, #02-25"),
             new Price("1200000"),
-            new Size("1200")
+            new Size("1200"),
+            new PropertyType("HDB")
     );
 
     private final Property anotherValidProperty = new Property(
             new PropertyAddress("123 Clementi Ave 3"),
             new Price("1000000"),
-            new Size("1200")
+            new Size("1200"),
+            new PropertyType("HDB")
     );
 
     @Test
@@ -125,7 +128,8 @@ public class AddPropertyCommandTest {
     public void equals() {
         AddPropertyCommand firstCommand = new AddPropertyCommand(INDEX_FIRST_PERSON, validProperty);
         AddPropertyCommand secondCommand = new AddPropertyCommand(INDEX_FIRST_PERSON,
-                new Property(new PropertyAddress("123 Street"), new Price("500000"), new Size("1000")));
+                new Property(new PropertyAddress("123 Street"), new Price("500000"), new Size("1000"),
+                            new PropertyType("Condo")));
 
         AddPropertyCommand firstCommandCopy = new AddPropertyCommand(INDEX_FIRST_PERSON, validProperty);
 

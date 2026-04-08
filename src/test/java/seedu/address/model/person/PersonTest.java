@@ -123,7 +123,8 @@ public class PersonTest {
         Property propertyWithoutType = new Property(
                 new PropertyAddress("789 No Type Road"),
                 new Price("600000"),
-                new Size("1200")
+                new Size("1200"),
+                new PropertyType("Condo")
         );
         Person personWithUntypedProperty = new PersonBuilder(ALICE).withProperties(Set.of(propertyWithoutType)).build();
         assertFalse(personWithUntypedProperty.hasHdbProperty());

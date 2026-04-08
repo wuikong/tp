@@ -13,7 +13,8 @@ public class PropertyMatchesFilterPredicateTest {
     private static final Property PROPERTY = new Property(
             new PropertyAddress("311 Clementi Ave 2"),
             new Price("1200000"),
-            new Size("1200"));
+            new Size("1200"),
+            new PropertyType("HDB"));
 
     @Test
     public void equals() {

@@ -20,6 +20,7 @@ import seedu.address.model.UserPrefs;
 import seedu.address.model.property.Price;
 import seedu.address.model.property.Property;
 import seedu.address.model.property.PropertyAddress;
+import seedu.address.model.property.PropertyType;
 import seedu.address.model.property.Size;
 
 public class ViewPropertyCommandTest {
@@ -30,17 +31,20 @@ public class ViewPropertyCommandTest {
         Property propertyA = new Property(
                 new PropertyAddress("123 Clementi Ave 3"),
                 new Price("1000000"),
-                new Size("121")
+                new Size("121"),
+                new PropertyType("HDb")
         );
         Property propertyB = new Property(
                 new PropertyAddress("456 Jurong West St 42"),
                 new Price("900000"),
-                new Size("99")
+                new Size("99"),
+                new PropertyType("HDB")
         );
         Property propertyC = new Property(
                 new PropertyAddress("789 Ang Mo Kio Ave 5"),
                 new Price("850000"),
-                new Size("110")
+                new Size("110"),
+                new PropertyType("HDB")
         );
 
         // Add properties with single ownership
@@ -112,7 +116,8 @@ public class ViewPropertyCommandTest {
         Property propertyA = new Property(
                 new PropertyAddress("123 Clementi Ave 3"),
                 new Price("1000000"),
-                new Size("121")
+                new Size("121"),
+                new PropertyType("HDB")
         );
 
         // Add property to a person

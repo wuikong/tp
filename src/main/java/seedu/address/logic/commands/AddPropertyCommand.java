@@ -31,7 +31,7 @@ public class AddPropertyCommand extends Command {
             + PREFIX_ADDRESS + "ADDRESS "
             + PREFIX_PRICE + "PRICE "
             + PREFIX_SIZE + "SIZE "
-            + "[" + PREFIX_TYPE + "TYPE]\n"
+            + PREFIX_TYPE + "TYPE\n"
             + "Example: " + COMMAND_WORD + " "
             + PREFIX_LISTING_INDEX + "1 "
             + PREFIX_ADDRESS + "311 Clementi Ave 2, #02-25 "
@@ -151,15 +151,16 @@ public class AddPropertyCommand extends Command {
      * @throws CommandException If the property violates any constraints.
      */
     private void ensurePropertyCanBeAdded(Model model, Person personToEdit) throws CommandException {
-        if (personToEdit.hasProperty(property)) {
-            throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
-        }
-
-        ensurePropertyNotOwnedByAnotherClient(model, personToEdit);
-
-        if (isHdbProperty(property) && personToEdit.hasHdbProperty()) {
-            throw new CommandException(MESSAGE_DUPLICATE_HDB_PROPERTY);
-        }
+      if (personToEdit.getProperties().stream()
+          .anyMatch(p -> p.isSameProperty(property))) {
+        throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
+      }
+      
+      ensurePropertyNotOwnedByAnotherClient(model, personToEdit);
+      
+      if (isHdbProperty(property) && personToEdit.hasHdbProperty()) {
+        throw new CommandException(MESSAGE_DUPLICATE_HDB_PROPERTY);
+      }
     }
 
     /**
