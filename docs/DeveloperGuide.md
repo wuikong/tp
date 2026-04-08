@@ -659,12 +659,22 @@ Goal: Filter clients by name to quickly find specific clients
 5. Error messages should be clear and guide the user towards corrective action.
 6. The application should be packaged as a single executable JAR file.
 7. User data should be stored locally and not transmitted externally without user consent.
+8. The application should have a user-friendly command syntax that is consistent across different features.
 
 ### Glossary
 
 * **Mainstream OS**: Windows, macOS, and Linux.
 * **Executable JAR file**: A packaged Java archive file that can be run directly to start the application.
 * **MSS**: Stands for Main Success Scenario, a scenario of the use case which will be considered a successful one.
+* **Extension**: An alternative scenario that may occur during the execution of a use case, which may be triggered by an error or an edge case.
+* **Client**: A person who is either buying or selling a property, whose details are stored in the address book.
+* **Property**: A residential property listing, whose details are stored in the address book and linked to a client who owns it.
+* **Index**: The position of a client or property in the displayed list, starting from 1 for the first item.
+* **Filter criteria**: The keywords or parameters used to filter the client or property list (e.g., name keywords for clients, address keywords/price range/size range for properties).
+* **Filtered list**: A subset of the full client or property list that matches the filter criteria and is displayed to the user.
+* **Command syntax**: The format of the commands that the user types to interact with the application (e.g., `add n/John Doe p/98765432`)
+* **Valid user command**: A command that follows the defined command syntax and can be parsed and executed by the application without errors.
+* **Above-average typing speed**: A typing speed that is faster than 40 words per minute (wpm)
 
 ---
 
@@ -711,3 +721,8 @@ testers are expected to do more *exploratory* testing.
 
    1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
 2. _{ more test cases … }_
+
+## **Appendix: Planned Enhancements** ##
+Team size: 5
+
+1. 
