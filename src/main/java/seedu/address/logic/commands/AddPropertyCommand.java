@@ -55,7 +55,7 @@ public class AddPropertyCommand extends Command {
      * to the client at the specified {@code Index}.
      *
      * @param targetIndex The index of the person to add the property to.
-     * @param property The property to add.
+     * @param property    The property to add.
      */
     public AddPropertyCommand(Index targetIndex, Property property) {
         requireNonNull(targetIndex);
@@ -146,7 +146,7 @@ public class AddPropertyCommand extends Command {
     /**
      * Ensures that the property can be added to the specified client.
      *
-     * @param model The model containing the address book data.
+     * @param model        The model containing the address book data.
      * @param personToEdit The client to add the property to.
      * @throws CommandException If the property violates any constraints.
      */
@@ -155,9 +155,9 @@ public class AddPropertyCommand extends Command {
                 .anyMatch(p -> p.isSameProperty(property))) {
             throw new CommandException(MESSAGE_DUPLICATE_PROPERTY);
         }
-      
+
         ensurePropertyNotOwnedByAnotherClient(model, personToEdit);
-      
+
         if (isHdbProperty(property) && personToEdit.hasHdbProperty()) {
             throw new CommandException(MESSAGE_DUPLICATE_HDB_PROPERTY);
         }
@@ -166,7 +166,7 @@ public class AddPropertyCommand extends Command {
     /**
      * Ensures that the property is not already owned by another client.
      *
-     * @param model The model containing the address book data.
+     * @param model        The model containing the address book data.
      * @param personToEdit The client attempting to own the property.
      * @throws CommandException If the property is already owned by another client.
      */
