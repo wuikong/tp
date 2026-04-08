@@ -125,8 +125,8 @@ public class EditPropertyCommand extends Command {
 
         model.setPerson(owner, editedPerson);
 
-        model.updateFilteredPropertyList(p -> p.equals(editedProperty));
-        model.updateFilteredPersonList(p -> p.isSamePerson(editedPerson));
+        model.updateFilteredPropertyList(property -> property.equals(editedProperty));
+        model.updateFilteredPersonList(person -> person.isSamePerson(editedPerson));
 
         return new CommandResult(String.format(MESSAGE_EDIT_PROPERTY_SUCCESS, editedProperty));
     }
