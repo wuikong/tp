@@ -64,6 +64,10 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 <puml src="diagrams/ComponentManagers.puml" width="300" />
 
+### General class diagram
+
+<puml src="diagrams/GeneralClassDiagram.puml" width="850" />
+
 The sections below give more details of each component.
 
 ### UI component
@@ -764,4 +768,3 @@ No external libraries beyond those already present in AB3 (`Jackson`, `JavaFX`, 
 - Delivered a coherent, property-agent-focused CLI experience that meaningfully differentiates ClientVault from the AB3 baseline.
 
 ---
-

@@ -1,0 +1,83 @@
+@startuml
+!include style.puml
+skinparam arrowThickness 1.1
+
+package Main as MainPackage {
+Class MainApp USER_COLOR
+}
+
+package UI as UIPackage {
+Class "<<interface>>\nUi" as Ui UI_COLOR
+Class UiManager UI_COLOR
+Class MainWindow UI_COLOR
+}
+
+package Logic as LogicPackage {
+Class "<<interface>>\nLogic" as Logic LOGIC_COLOR
+Class LogicManager LOGIC_COLOR
+Class AddressBookParser LOGIC_COLOR
+Class "{abstract}\nCommand" as Command LOGIC_COLOR
+Class CommandResult LOGIC_COLOR
+}
+
+package Model as ModelPackage {
+Class "<<interface>>\nModel" as Model MODEL_COLOR
+Class ModelManager MODEL_COLOR
+Class AddressBook MODEL_COLOR
+Class UserPrefs MODEL_COLOR
+Class Person MODEL_COLOR
+Class Property MODEL_COLOR
+Class UniquePersonList MODEL_COLOR
+Class UniquePropertyList MODEL_COLOR
+}
+
+package Storage as StoragePackage {
+Class "<<interface>>\nStorage" as Storage STORAGE_COLOR
+Class StorageManager STORAGE_COLOR
+Class "<<interface>>\nAddressBookStorage" as AddressBookStorage STORAGE_COLOR
+Class "<<interface>>\nUserPrefsStorage" as UserPrefsStorage STORAGE_COLOR
+Class JsonAddressBookStorage STORAGE_COLOR
+Class JsonUserPrefsStorage STORAGE_COLOR
+Class JsonSerializableAddressBook STORAGE_COLOR
+}
+
+Class HiddenOutside #FFFFFF
+HiddenOutside ..> MainApp
+
+MainApp --> Ui
+MainApp --> Logic
+MainApp --> Model
+MainApp --> Storage
+
+UiManager .up.|> Ui
+UiManager --> MainWindow
+
+LogicManager .up.|> Logic
+LogicManager -left-> AddressBookParser
+LogicManager ..> Command : <<call>>
+LogicManager ..> CommandResult
+Logic ..> CommandResult
+AddressBookParser ..> Command
+Command .right.> CommandResult : <<create>>
+
+ModelManager .left.|> Model
+ModelManager --> AddressBook
+ModelManager -right-> UserPrefs
+AddressBook *--> UniquePersonList
+AddressBook *--> UniquePropertyList
+UniquePersonList --> "*" Person
+UniquePropertyList --> "*" Property
+
+StorageManager .left.|> Storage
+StorageManager -down-> AddressBookStorage
+StorageManager -down-> UserPrefsStorage
+JsonAddressBookStorage .up.|> AddressBookStorage
+JsonUserPrefsStorage .up.|> UserPrefsStorage
+JsonAddressBookStorage ..> JsonSerializableAddressBook
+
+MainApp -[hidden]right-> Ui
+Ui -[hidden]right-> Logic
+Logic -[hidden]right-> Model
+Model -[hidden]right-> Storage
+
+@enduml
