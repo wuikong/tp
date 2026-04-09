@@ -64,6 +64,10 @@ For example, the `Logic` component defines its API in the `Logic.java` interface
 
 <puml src="diagrams/ComponentManagers.puml" width="300" />
 
+### General class diagram
+
+<puml src="diagrams/GeneralClassDiagram.puml" width="850" />
+
 The sections below give more details of each component.
 
 ### UI component
@@ -692,35 +696,53 @@ testers are expected to do more *exploratory* testing.
 ### Launch and shutdown
 
 1. Initial launch
+   1. Download the jar file and copy into an empty folder.
+   2. Double-click the jar file.<br>
+      Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 
-   1. Download the jar file and copy into an empty folder
-   2. Double-click the jar file Expected: Shows the GUI with a set of sample contacts. The window size may not be optimum.
 2. Saving window preferences
-
    1. Resize the window to an optimum size. Move the window to a different location. Close the window.
    2. Re-launch the app by double-clicking the jar file.<br>
       Expected: The most recent window size and location is retained.
-3. _{ more test cases … }_
 
-### Deleting a person
+3. Shutdown using CLI
+   1. Launch the app by double-clicking the jar file.
+   2. Test case: `exit`<br>
+      Expected: Window is closed.
 
-1. Deleting a person while all persons are being shown
+### Deleting a client
 
-   1. Prerequisites: List all persons using the `list` command. Multiple persons in the list.
-   2. Test case: `delete 1`<br>
-      Expected: First contact is deleted from the list. Details of the deleted contact shown in the status message. Timestamp in the status bar is updated.
-   3. Test case: `delete 0`<br>
-      Expected: No person is deleted. Error details shown in the status message. Status bar remains the same.
-   4. Other incorrect delete commands to try: `delete`, `delete x`, `...` (where x is larger than the list size)<br>
+1. Deleting a client while all clients are being shown
+   1. Prerequisites: List all clients using the `list` command. Multiple clients in the list.
+   2. Test case: `deleteClient 1`<br>
+      Expected: First client is deleted from the list. Properties owned by the deleted client are also deleted. Details of the deleted client shown in the status message.
+   3. Test case: `deleteClient 0`<br>
+      Expected: No client is deleted. No properties are deleted. Error details shown in the status message.
+   4. Other incorrect delete commands to try: `deleteClient`, `deleteClient x`, `...` (where x is larger than the list size)<br>
       Expected: Similar to previous.
-2. _{ more test cases … }_
+
+2. Deleting a client while a filtered client list is being shown
+   1. Prerequisites: A `filterClient` command has been successfully executed. Only some clients and properties in the list.
+   2. Test case: `deleteClient 1`<br>
+      Expected: First client is deleted from the filtered list. Properties owned by the deleted client are also deleted from the filtered list. Details of the deleted client shown in the status message.
+      1. Test case: `list`<br>
+         Expected: Deleted client and properties are not present in the list of all clients and properties.
+   3. Test case: `deleteClient x` (where x is larger than the list size)<br>
+      Expected: No client is deleted. No properties are deleted. Error details shown in the status message.
 
 ### Saving data
 
 1. Dealing with missing/corrupted data files
+   1. Prerequisites: Saved data file `[JAR file location]/data/addressbook.json` exists and contains valid non-empty data.
+   2. Open the file and remove the name of the first client in the data file to create an invalid data file.
+   3. Save the file and re-launch the app by double-clicking the jar file.<br>
+      Expected: App starts with empty lists. Error details shown in the terminal log.
 
-   1. _{explain how to simulate a missing/corrupted file, and the expected behavior}_
-2. _{ more test cases … }_
+2. Editing data files while maintaining validity
+   1. Prerequisites: Saved data file `[JAR file location]/data/addressbook.json` exists and contains valid non-empty data.
+   2. Open the file and change the phone number of the first client in the data file to `98989898`.
+   3. Save the file and re-launch the app by double-clicking the jar file.<br>
+      Expected: App starts with the most recent data and the phone number of the first client in the list modified.
 
 ## **Appendix: Planned Enhancements** ##
 Team size: 5
@@ -764,4 +786,3 @@ No external libraries beyond those already present in AB3 (`Jackson`, `JavaFX`, 
 - Delivered a coherent, property-agent-focused CLI experience that meaningfully differentiates ClientVault from the AB3 baseline.
 
 ---
-
