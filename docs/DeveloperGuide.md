@@ -292,6 +292,31 @@ The following sequence diagram illustrates the interactions:
 <puml src="diagrams/DeletePropertySequenceDiagram.puml" alt="Interactions between DeletePropertyCommand and ModelManager for list updates" />
 >>>>>>> master
 
+### Filter Client feature
+The filterClient feature allows users to filter the client list by name keywords, tag keywords, or both, and automatically shows only the properties belonging to those filtered clients. This is done by updating the predicates on the FilteredList objects.
+
+The `FilterClientCommand` is executed through the following flow:
+
+1. The command is executed with a client predicate (`PersonMatchesFilterPredicate`) built from the user input, which may include name keywords, tag keywords, or both. 
+2. `FilterClientCommand` calls `Model#updateFilteredPersonList(predicate)`. 
+3. `ModelManager#updateFilteredPersonList(...)` updates the person `FilteredList` by calling `setPredicate(...)`.
+4. `FilterClientCommand` then calls `Model#updateFilteredPropertyList(predicate)`.
+5. `ModelManager#updateFilteredPropertyList(...)` updates the property `FilteredList` to show only properties belonging to the filtered clients.
+6. The command returns a `CommandResult` after both filtered lists have been updated.
+
+The following sequence diagram illustrates the interactions:
+
+<puml src="diagrams/FilterClientSequenceDiagram.puml" alt="Interactions between FilterClientCommand and ModelManager for filtered list updates" />
+
+#### Design Highlights
+
+* **Multi-criteria Filtering**: The `PersonMatchesFilterPredicate` implements the `Predicate<Person>` interface and supports filtering by name keywords and tag keywords simultaneously.
+* **Name Keyword Matching**: The predicate performs case-insensitive word matching on the client's name using `StringUtil.containsWordIgnoreCase()`. Multiple name keywords use OR logic — a client matches if their name contains any of the specified keywords.
+* **Tag Keyword Matching**: The predicate performs case-insensitive exact matching on the client's tags. Multiple tag keywords use OR logic — a client matches if they have any of the specified tags.
+* **AND Logic Between Criteria**: When both name and tag keywords are provided, a client must satisfy both conditions simultaneously to be included in the results.
+* **Cascading Filter**: After filtering clients, the command automatically updates the property list to show only properties belonging to those clients, providing a complete view of relevant data.
+* **Flexible Criteria**: At least one filter criterion (name or tag keywords) must be provided, but both can be combined.
+
 ### Filter Property feature
 
 The filter property feature allows users to filter properties by address keywords, type keywords, price range, and size range, and automatically display the owners of those properties. This is done by updating the predicates on the `FilteredList` objects.
@@ -318,6 +343,29 @@ The following sequence diagram illustrates the interactions:
 * **Cascading Filter**: After filtering properties, the command automatically updates the person list to show only those who own matching properties, providing a complete view of relevant data.
 * **Flexible Criteria**: At least one filter criterion (address keywords, type keywords, price range, or size range) must be provided, but users can combine any of these filters as needed.
 
+### Sort Property feature
+
+The sortProperty feature allows users to sort the currently displayed property list by price or size in ascending or descending order. This is done by applying a Comparator<Property> to the SortedList<Property>.
+
+The `SortPropertyCommand` is executed through the following flow:
+
+1. `SortPropertyCommand` constructs a `Comparator<Property>` based on the specified sortType — either "price" or "size".
+2. If the specified order is "down", the comparator is reversed.
+3. `SortPropertyCommand` calls `Model#sortPropertyList(comparator)`.
+4. `ModelManager#sortPropertyList(...)` calls `setComparator(comparator)` on the underlying `SortedList<Property>`.
+5. The sorted list immediately reflects the new order.
+6. The command returns a `CommandResult`.
+
+The following sequence diagram illustrates the interactions:
+
+<puml src="diagrams/SortPropertySequenceDiagram.puml" alt="SortProperty sequence diagram" />
+
+#### Design Highlights
+
+* **Layered List Architecture**: Properties are stored in a `SortedList<Property>` wrapping a `FilteredList<Property>`. Sort and filter operations are independent and can be applied simultaneously without conflict.
+* **Numeric Comparison**: The comparator parses `Price.value` or `Size.value` string fields to Long before comparing, ensuring correct numeric ordering rather than lexicographic ordering.
+* **Persistent Sort State**: The sort order persists until another sortProperty command is issued or the application is restarted, allowing users to browse sorted results freely.
+
 ### \[Proposed\] Undo/redo feature
 
 #### Proposed Implementation
@@ -336,11 +384,11 @@ Step 1. The user launches the application for the first time. The `VersionedAddr
 
 <puml src="diagrams/UndoRedoState0.puml" alt="UndoRedoState0" />
 
-Step 2. The user executes `delete 5` command to delete the 5th person in the address book. The `delete` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `delete 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
+Step 2. The user executes `deleteClient 5` command to delete the 5th client in the address book. The `deleteClient` command calls `Model#commitAddressBook()`, causing the modified state of the address book after the `deleteClient 5` command executes to be saved in the `addressBookStateList`, and the `currentStatePointer` is shifted to the newly inserted address book state.
 
 <puml src="diagrams/UndoRedoState1.puml" alt="UndoRedoState1" />
 
-Step 3. The user executes `add n/David …` to add a new person. The `add` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
+Step 3. The user executes `addClient n/David …` to add a new client. The `addClient` command also calls `Model#commitAddressBook()`, causing another modified address book state to be saved into the `addressBookStateList`.
 
 <puml src="diagrams/UndoRedoState2.puml" alt="UndoRedoState2" />
 
@@ -350,7 +398,7 @@ Step 3. The user executes `add n/David …` to add a new person. The `add` comma
 
 </box>
 
-Step 4. The user now decides that adding the person was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
+Step 4. The user now decides that adding the client was a mistake, and decides to undo that action by executing the `undo` command. The `undo` command will call `Model#undoAddressBook()`, which will shift the `currentStatePointer` once to the left, pointing it to the previous address book state, and restores the address book to that state.
 
 <puml src="diagrams/UndoRedoState3.puml" alt="UndoRedoState3" />
 
@@ -817,6 +865,11 @@ testers are expected to do more *exploratory* testing.
     4. Other incorrect add commands to try: `addClient`, `addClient n/John`, `addClient n/John p/abc`, `...`<br>
        Expected: Similar to previous.
 
+3. Adding a duplicate client
+    1. Prerequisites: At least one client exists in the list. A client with the same details already exists in the list.
+    2. Test case: `addClient n/John Doe p/98765432
+       Expected: No client is added. Error details shown in the status message.
+
 ### Adding a property
 
 1. Adding a property to an existing client
@@ -830,7 +883,7 @@ testers are expected to do more *exploratory* testing.
     1. Prerequisites: At least one client exists in the list.
     2. Test case: `addProperty i/1 a/ p/500000 s/1000 t/HDB`<br>
        Expected: No property is added. Error details shown in the status message.
-    3. Test case: `addProperty 1 a/123 Main Street p/abc s/1000 t/HDB`<br>
+    3. Test case: `addProperty i/1 a/123 Main Street p/abc s/1000 t/HDB`<br>
        Expected: No property is added. Error details shown in the status message.
     4. Other incorrect add commands to try: `addProperty`, `addProperty x`, `addProperty 1 a/123 Main Street`, `...`<br>
        Expected: Similar to previous.
@@ -838,6 +891,11 @@ testers are expected to do more *exploratory* testing.
 3. Adding a HDB property to a client who already has a HDB property
     1. Prerequisites: At least one client exists in the list. The client already has a HDB type property.
     2. Test case: `addProperty i/1 a/789 Another Street p/550000 s/900 t/HDB`<br>
+       Expected: No property is added. Error details shown in the status message.
+
+4. Adding a duplicate property
+    1. Prerequisites: At least one client exists in the list. A property with the same details already exists under the client.
+    2. Test case: `addProperty i/1 a/123 Main Street p/500000 s/1000 t/HDB`<br>
        Expected: No property is added. Error details shown in the status message.
 
 ### Deleting a client
@@ -884,14 +942,14 @@ testers are expected to do more *exploratory* testing.
 
 1. Editing a client with valid details
    1. Prerequisites: At least one client exists in the list.
-   2. Test case: `editClient i/1 n/John Smith p/98765432`<br>
+   2. Test case: `editClient 1 n/John Smith p/98765432`<br>
       Expected: First client's name and phone are updated. Details of the edited client shown in the status message.
-   3. Test case: `editClient i/1 e/johnsmith@example.com`<br>
+   3. Test case: `editClient 1 e/johnsmith@example.com`<br>
       Expected: First client's email is updated. Details of the edited client shown in the status message.
 
 2. Editing a client with invalid details
    1. Prerequisites: At least one client exists in the list.
-   2. Test case: `editClient i/1 n/`<br>
+   2. Test case: `editClient 1 n/`<br>
       Expected: No client is edited. Error details shown in the status message.
    3. Test case: `editClient 1 p/abc`<br>
       Expected: No client is edited. Error details shown in the status message.
@@ -900,7 +958,7 @@ testers are expected to do more *exploratory* testing.
 
 3. Editing a client results in duplicate client entry
    1. Prerequisites: At least two clients exist in the list. Edit the details of one client with the details of another client.
-   2. Test case: `editClient i/1 n/Jane Smith p/91234567` <br>
+   2. Test case: `editClient 1 n/Jane Smith p/91234567` <br>
       Expected: No client is edited. Error details shown in the status message.
 
 ### Editing a property

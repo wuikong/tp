@@ -15,10 +15,10 @@ end box
 [-->FilterPropertyCommand : execute(...)
 activate FilterPropertyCommand
 
-FilterPropertyCommand -> ModelManager : updateFilteredPropertyList(pred)
+FilterPropertyCommand -> ModelManager : updateFilteredPropertyList(predicate)
 activate ModelManager
 
-ModelManager -> FilteredProperties : setPredicate(pred)
+ModelManager -> FilteredProperties : setPredicate(predicate)
 activate FilteredProperties
 
 FilteredProperties --> ModelManager
