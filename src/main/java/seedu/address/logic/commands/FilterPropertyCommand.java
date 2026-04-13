@@ -4,6 +4,7 @@ import static java.util.Objects.requireNonNull;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_ADDRESS;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_PRICE;
 import static seedu.address.logic.parser.CliSyntax.PREFIX_SIZE;
+import static seedu.address.logic.parser.CliSyntax.PREFIX_TYPE;
 
 import seedu.address.commons.util.ToStringBuilder;
 import seedu.address.model.Model;
@@ -17,11 +18,13 @@ public class FilterPropertyCommand extends Command {
     public static final String COMMAND_WORD = "filterProperty";
 
     public static final String MESSAGE_USAGE = COMMAND_WORD + ": Lists all properties that match the given "
-            + "address keywords and/or price and size ranges, and displays them as a list with index numbers.\n"
+            + "address keywords, type and/or price and size ranges, and displays them as a list with index numbers.\n"
             + "Parameters: [" + PREFIX_ADDRESS + "ADDRESS_KEYWORDS] "
+            + "[" + PREFIX_TYPE + "TYPE] "
             + "[" + PREFIX_PRICE + "MIN_PRICE MAX_PRICE] "
             + "[" + PREFIX_SIZE + "MIN_SIZE MAX_SIZE]\n"
             + "Example: " + COMMAND_WORD + " " + PREFIX_ADDRESS + "Clementi "
+            + PREFIX_TYPE + "HDB "
             + PREFIX_PRICE + "1000 10000 "
             + PREFIX_SIZE + "500 5000";
 

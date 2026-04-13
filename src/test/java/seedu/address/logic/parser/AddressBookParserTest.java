@@ -19,7 +19,6 @@ import seedu.address.logic.commands.DeleteClientCommand;
 import seedu.address.logic.commands.ExitCommand;
 import seedu.address.logic.commands.FilterClientCommand;
 import seedu.address.logic.commands.FilterPropertyCommand;
-import seedu.address.logic.commands.FilterTypeCommand;
 import seedu.address.logic.commands.HelpCommand;
 import seedu.address.logic.commands.ListCommand;
 import seedu.address.logic.commands.RemarkPropertyCommand;
@@ -30,7 +29,6 @@ import seedu.address.logic.parser.exceptions.ParseException;
 import seedu.address.model.person.Person;
 import seedu.address.model.person.PersonMatchesFilterPredicate;
 import seedu.address.model.property.PropertyMatchesFilterPredicate;
-import seedu.address.model.property.PropertyTypeContainsKeywordsPredicate;
 import seedu.address.testutil.PersonBuilder;
 import seedu.address.testutil.PersonUtil;
 
@@ -94,16 +92,7 @@ public class AddressBookParserTest {
                 FilterPropertyCommand.COMMAND_WORD + " a/"
                 + keywords.stream().collect(Collectors.joining(" ")));
         assertEquals(new FilterPropertyCommand(new PropertyMatchesFilterPredicate(
-            keywords, 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)), command);
-    }
-
-    @Test
-    public void parseCommand_filterType() throws Exception {
-        List<String> keywords = Arrays.asList("HDB");
-        FilterTypeCommand command = (FilterTypeCommand) parser.parseCommand(
-                FilterTypeCommand.COMMAND_WORD + " type/"
-                + keywords.stream().collect(Collectors.joining(" ")));
-        assertEquals(new FilterTypeCommand(new PropertyTypeContainsKeywordsPredicate(keywords)), command);
+            keywords, List.of(), 0, Long.MAX_VALUE, 0, Long.MAX_VALUE)), command);
     }
 
     @Test

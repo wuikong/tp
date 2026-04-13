@@ -260,7 +260,7 @@ Examples:
 ### Filtering properties: `filterProperty`
 
 ![filterProperty](images/filterProperty.png)
-Finds properties that match the given address keywords and/or price and size ranges.
+Finds properties that match the given address keywords, type and/or price and size ranges.
 
 Format: `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE] [type/TYPE]`
 
@@ -299,6 +299,8 @@ Format: `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZ
 
 **Type Filtering:**
 
+* Specify `type/TYPE` to find properties by type.
+* Supported values are `HDB` and `Condo`
 * The search is case-insensitive. e.g `hdb` will match `HDB`.
 * Only full words will be matched e.g. `HD` will not match `HDB`.
 
@@ -306,6 +308,7 @@ Examples:
 
 * `filterProperty a/Bukit` returns properties with "Bukit" in the address.
 * `filterProperty a/punggol changi` returns properties with either "Punggol" or "Changi" in the address.
+* `filterProperty type/HDB` returns all HDB properties.
 * `filterProperty pr/1000000 2000000` returns properties priced between 1,000,000 and 2,000,000.
 * `filterProperty s/800 1200` returns properties with sizes between 800 and 1200 sqft.
 * `filterProperty type/HDB` returns all HDB properties. 

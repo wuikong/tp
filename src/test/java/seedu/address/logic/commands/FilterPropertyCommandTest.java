@@ -38,23 +38,23 @@ public class FilterPropertyCommandTest {
         model = new ModelManager(getTypicalAddressBook(), new UserPrefs());
         expectedModel = new ModelManager(getTypicalAddressBook(), new UserPrefs());
 
-        addPropertyToModel(model, INDEX_FIRST_PERSON, "311 Clementi Ave 2", "1200000", "1200");
-        addPropertyToModel(model, INDEX_FIRST_PERSON, "50 Jurong East St 24", "850000", "1000");
-        addPropertyToModel(model, INDEX_SECOND_PERSON, "10 Punggol Walk", "950000", "1100");
+        addPropertyToModel(model, INDEX_FIRST_PERSON, "311 Clementi Ave 2", "1200000", "1200", "HDB");
+        addPropertyToModel(model, INDEX_FIRST_PERSON, "50 Jurong East St 24", "850000", "1000", "Condo");
+        addPropertyToModel(model, INDEX_SECOND_PERSON, "10 Punggol Walk", "950000", "1100", "HDB");
 
-        addPropertyToModel(expectedModel, INDEX_FIRST_PERSON, "311 Clementi Ave 2", "1200000", "1200");
-        addPropertyToModel(expectedModel, INDEX_FIRST_PERSON, "50 Jurong East St 24", "850000", "1000");
-        addPropertyToModel(expectedModel, INDEX_SECOND_PERSON, "10 Punggol Walk", "950000", "1100");
+        addPropertyToModel(expectedModel, INDEX_FIRST_PERSON, "311 Clementi Ave 2", "1200000", "1200", "HDB");
+        addPropertyToModel(expectedModel, INDEX_FIRST_PERSON, "50 Jurong East St 24", "850000", "1000", "Condo");
+        addPropertyToModel(expectedModel, INDEX_SECOND_PERSON, "10 Punggol Walk", "950000", "1100", "HDB");
     }
 
     @Test
     public void equals() {
         PropertyMatchesFilterPredicate firstPredicate =
                 new PropertyMatchesFilterPredicate(Collections.singletonList("first"),
-                        0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
+                        Collections.emptyList(), 0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
         PropertyMatchesFilterPredicate secondPredicate =
                 new PropertyMatchesFilterPredicate(Collections.singletonList("second"),
-                        0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
+                        Collections.emptyList(), 0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
 
         FilterPropertyCommand findFirstCommand = new FilterPropertyCommand(firstPredicate);
         FilterPropertyCommand findSecondCommand = new FilterPropertyCommand(secondPredicate);
@@ -111,7 +111,8 @@ public class FilterPropertyCommandTest {
     public void execute_priceRangeAndSizeRange_propertiesAndOwnersFound() {
         String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED, 2);
         PropertyMatchesFilterPredicate predicate =
-                new PropertyMatchesFilterPredicate(Collections.emptyList(), 900000, 1300000, 1050, 1300);
+                new PropertyMatchesFilterPredicate(Collections.emptyList(), Collections.emptyList(),
+                        900000, 1300000, 1050, 1300);
         FilterPropertyCommand command = new FilterPropertyCommand(predicate);
         expectedModel.updateFilteredPropertyList(predicate);
         expectedModel.updateFilteredPersonList(person -> expectedModel.getFilteredPropertyList().stream()
@@ -126,10 +127,26 @@ public class FilterPropertyCommandTest {
     public void toStringMethod() {
         PropertyMatchesFilterPredicate predicate =
                 new PropertyMatchesFilterPredicate(Arrays.asList("keyword"),
-                        0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
+                        Collections.emptyList(), 0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
         FilterPropertyCommand filterPropertyCommand = new FilterPropertyCommand(predicate);
         String expected = FilterPropertyCommand.class.getCanonicalName() + "{predicate=" + predicate + "}";
         assertEquals(expected, filterPropertyCommand.toString());
+    }
+
+    @Test
+    public void execute_typeKeyword_propertiesAndOwnersFound() {
+        String expectedMessage = String.format(MESSAGE_PROPERTIES_LISTED, 1);
+        PropertyMatchesFilterPredicate predicate =
+                new PropertyMatchesFilterPredicate(Collections.emptyList(), Collections.singletonList("Condo"),
+                        0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
+        FilterPropertyCommand command = new FilterPropertyCommand(predicate);
+        expectedModel.updateFilteredPropertyList(predicate);
+        expectedModel.updateFilteredPersonList(person -> expectedModel.getFilteredPropertyList().stream()
+                .anyMatch(property -> person.getProperties().contains(property)));
+
+        assertCommandSuccess(command, model, expectedMessage, expectedModel);
+        assertEquals(1, model.getFilteredPropertyList().size());
+        assertEquals(1, model.getFilteredPersonList().size());
     }
 
     /**
@@ -137,13 +154,13 @@ public class FilterPropertyCommandTest {
      */
     private PropertyMatchesFilterPredicate preparePredicate(String userInput) {
         return new PropertyMatchesFilterPredicate(Arrays.asList(userInput.split("\\s+")),
-                0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
+                Collections.emptyList(), 0, Long.MAX_VALUE, 0, Long.MAX_VALUE);
     }
 
-    private void addPropertyToModel(Model model, Index index, String address, String price, String size)
+    private void addPropertyToModel(Model model, Index index, String address, String price, String size, String type)
             throws Exception {
         Property property = new Property(new PropertyAddress(address), new Price(price), new Size(size),
-                    new PropertyType("Condo"));
+                new PropertyType(type));
         new AddPropertyCommand(index, property).execute(model);
     }
 }
