@@ -490,7 +490,7 @@ Goal: Add a new property's details
       Use case resumes from step 3
 
 * 2b. System detects duplicate property entry
-    * 2b1. System shows an error message that the client already exists in the address book
+    * 2b1. System shows an error message that the property already exists in the address book
 
       Use case ends
   
