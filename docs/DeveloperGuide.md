@@ -95,7 +95,7 @@ Here's a (partial) class diagram of the `Logic` component:
 
 The sequence diagram below illustrates the interactions within the `Logic` component, taking `execute("deleteClient 1")` API call as an example.
 
-<puml src="diagrams/DeleteClientSequenceDiagram.puml" alt="Interactions Inside the Logic Component for the `delete 1` Command" />
+<puml src="diagrams/DeleteClientCommand.puml" alt="Interactions Inside the Logic Component for the `deleteClient 1` Command" />
 
 <box type="info" seamless>
 

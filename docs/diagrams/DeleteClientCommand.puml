@@ -50,6 +50,6 @@ activate ModelManager
 ModelManager --> DeleteClientCommand
 deactivate ModelManager
 
-[<-- DeleteClientCommand : new CommandResult(MESSAGE_DELETE_CLIENT_SUCCESS)
+[<-- DeleteClientCommand : CommandResult
 deactivate DeleteClientCommand
 @enduml

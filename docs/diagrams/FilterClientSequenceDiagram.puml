@@ -1,0 +1,37 @@
+@startuml
+!include style.puml
+skinparam ArrowFontStyle plain
+
+box Logic LOGIC_COLOR_T1
+participant ":FilterClientCommand" as FCC LOGIC_COLOR
+end box
+
+box Model MODEL_COLOR_T1
+participant ":Model" as M MODEL_COLOR
+end box
+
+[-> FCC : execute(model)
+activate FCC
+
+FCC -> M : updateFilteredPersonList(predicate)
+activate M
+
+M --> FCC :
+deactivate M
+
+FCC -> M : getFilteredPersonList()
+activate M
+M --> FCC : filteredPersonList
+deactivate M
+
+FCC -> M : updateFilteredPropertyList(predicate)
+activate M
+M -> M : get properties linked to filtered persons
+M --> FCC:
+
+
+
+
+[<-- FCC : CommandResult
+deactivate FCC
+@enduml
