@@ -69,8 +69,8 @@ public class FilterPropertyCommandParserTest {
 
         // Single keyword Condo
         expectedFilterPropertyCommand = new FilterPropertyCommand(
-        new PropertyMatchesFilterPredicate(Collections.emptyList(), Arrays.asList("Condo"),
-                0, Long.MAX_VALUE, 0, Long.MAX_VALUE));
+                new PropertyMatchesFilterPredicate(Collections.emptyList(), Arrays.asList("Condo"),
+                        0, Long.MAX_VALUE, 0, Long.MAX_VALUE));
         assertParseSuccess(parser, " type/Condo", expectedFilterPropertyCommand);
     }
 
