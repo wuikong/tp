@@ -83,7 +83,7 @@ public class FilterPropertyCommandParserTest {
 
     @Test
     public void parse_multipleTypes_throwsParseException() {
-                assertParseFailure(parser, " type/HDB Condo",
+        assertParseFailure(parser, " type/HDB Condo",
                 String.format(MESSAGE_INVALID_TYPE, FilterPropertyCommand.MESSAGE_USAGE));
     }
 
