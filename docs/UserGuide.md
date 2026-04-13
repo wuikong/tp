@@ -69,6 +69,7 @@ Adds a client to ClientVault.
 Format: `addClient n/NAME c/CONTACT e/EMAIL [t/TAG]…`
 
 * `NAME` cannot contain `-` or `/`.
+* Clients must have a unique `CONTACT` and `EMAIL`
 
 <box type="tip" seamless>
 
