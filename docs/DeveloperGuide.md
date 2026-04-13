@@ -286,15 +286,19 @@ omits lower-level details such as index checks, ownership checks, exception hand
 
 The following sequence diagram illustrates the interactions:
 
+<<<<<<< filterproperty-include-type
+<puml src="diagrams/DeletePropertySequenceDiagram.puml" alt="Interactions between DeletePropertyCommand and ModelManager" />
+=======
 <puml src="diagrams/DeletePropertySequenceDiagram.puml" alt="Interactions between DeletePropertyCommand and ModelManager for list updates" />
+>>>>>>> master
 
 ### Filter Property feature
 
-The filter property feature allows users to filter properties by address keywords, price range, and size range, and automatically display the owners of those properties. This is done by updating the predicates on the `FilteredList` objects.
+The filter property feature allows users to filter properties by address keywords, type keywords, price range, and size range, and automatically display the owners of those properties. This is done by updating the predicates on the `FilteredList` objects.
 
 The `FilterPropertyCommand` is executed through the following flow:
 
-1. The command is executed with a property predicate (`PropertyMatchesFilterPredicate`) built from the user input, which may include address keywords, price range, and/or size range.
+1. The command is executed with a property predicate (`PropertyMatchesFilterPredicate`) built from the user input, which may include address keywords, type keywords, price range, and/or size range.
 2. `FilterPropertyCommand` calls `Model#updateFilteredPropertyList(predicate)`.
 3. `ModelManager#updateFilteredPropertyList(...)` updates the property `FilteredList` by calling `setPredicate(...)`.
 4. `FilterPropertyCommand` then calls `Model#updateFilteredPersonList(predicate)`.
@@ -307,11 +311,12 @@ The following sequence diagram illustrates the interactions:
 
 #### Design Highlights
 
-* **Multi-criteria Filtering**: The `PropertyMatchesFilterPredicate` implements the `Predicate<Property>` interface and supports filtering by address keywords, price range, and size range simultaneously.
+* **Multi-criteria Filtering**: The `PropertyMatchesFilterPredicate` implements the `Predicate<Property>` interface and supports filtering by address keywords, type keywords, price range, and size range simultaneously.
 * **Address Keyword Matching**: The predicate supports multiple address keywords and performs case-insensitive matching using `StringUtil.containsWordIgnoreCase()`. Keywords use OR logic (properties matching any keyword are included).
+* **Type Keyword Matching**: The predicate supports optional type keywords and also performs case-insensitive matching.
 * **Numeric Range Filtering**: The predicate supports optional minimum and maximum price and size boundaries. A property must fall within all specified ranges to match.
 * **Cascading Filter**: After filtering properties, the command automatically updates the person list to show only those who own matching properties, providing a complete view of relevant data.
-* **Flexible Criteria**: At least one filter criterion (address keywords, price range, or size range) must be provided, but users can combine any of these filters as needed.
+* **Flexible Criteria**: At least one filter criterion (address keywords, type keywords, price range, or size range) must be provided, but users can combine any of these filters as needed.
 
 ### \[Proposed\] Undo/redo feature
 
@@ -693,7 +698,7 @@ Goal: Filter clients by name to quickly find specific clients
 **Note:**
 
 - Filter Property works the same way, with the following differences:
-    - In step 1, the actor can filter by property address, price range, or size range instead of client name and tag fields
+    - In step 1, the actor can filter by property address, property type, price range, or size range instead of client name and tag fields
       </box>
 
 **Use Case 8: Sort Property**
@@ -758,7 +763,7 @@ Goal: Clear all entries in the address book to start afresh
 * **Client**: A person who is either buying or selling a property, whose details are stored in the address book.
 * **Property**: A residential property listing, whose details are stored in the address book and linked to a client who owns it.
 * **Index**: The position of a client or property in the displayed list, starting from 1 for the first item.
-* **Filter criteria**: The keywords or parameters used to filter the client or property list (e.g., name keywords for clients, address keywords/price range/size range for properties).
+* **Filter criteria**: The keywords or parameters used to filter the client or property list (e.g., name keywords for clients, address keywords/type keywords/price range/size range for properties).
 * **Filtered list**: A subset of the full client or property list that matches the filter criteria and is displayed to the user.
 * **Command syntax**: The format of the commands that the user types to interact with the application (e.g., `add n/John Doe p/98765432`)
 * **Valid user command**: A command that follows the defined command syntax and can be parsed and executed by the application without errors.

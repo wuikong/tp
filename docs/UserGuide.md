@@ -247,15 +247,15 @@ Examples:
 ### Filtering properties: `filterProperty`
 
 ![filterProperty](images/filterProperty.png)
-Finds properties that match the given address keywords and/or price and size ranges.
+Finds properties that match the given address keywords, type and/or price and size ranges.
 
-Format: `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`
+Format: `filterProperty [a/ADDRESS_KEYWORDS] [type/TYPE] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`
 
 <box type="tip" seamless>
 
 **Tip:**
 
-- At least one filter criterion (address keywords, price range, or size range) must be provided.
+- At least one filter criterion (address keywords, type, price range, or size range) must be provided.
 - Multiple filter criteria can be combined in a single command.
 - The client list will show all clients that own any of the matched properties.
 
@@ -283,30 +283,19 @@ Format: `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZ
 * `MIN_SIZE` must be a non-negative integer.
 * `MIN_SIZE` must be smaller than or equal to `MAX_SIZE`.
 
+**Type Filtering:**
+
+* Specify `type/TYPE` to find properties by type.
+* Supported values are `HDB` and `Condo` (case-insensitive).
+
 Examples:
 
 * `filterProperty a/Bukit` returns properties with "Bukit" in the address.
 * `filterProperty a/punggol changi` returns properties with either "Punggol" or "Changi" in the address.
+* `filterProperty type/HDB` returns all HDB properties.
 * `filterProperty pr/1000000 2000000` returns properties priced between 1,000,000 and 2,000,000.
 * `filterProperty s/800 1200` returns properties with sizes between 800 and 1200 sqft.
-* `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500` returns properties in Clementi, priced 1-1.5M, and sized 1000-1500 sqft.
-
-### Filtering properties by type: `filterType`
-
-![filterType](images/filterType.png)
-Filters properties by type (HDB, Condo).
-
-Format: `filterType type/TYPE`
-
-* The search is case-insensitive. e.g `hdb` will match `HDB`
-* Only full words will be matched e.g. `HD` will not match `HDB
-* Properties matching the specified type will be returned.
-* The client list will show all clients that own any of the matched properties.
-
-Examples:
-
-* `filterType type/HDB` returns all HDB properties.
-* `filterType type/Condo` returns all Condo properties.
+* `filterProperty a/Clementi type/HDB pr/1000000 1500000 s/1000 1500` returns HDB properties in Clementi, priced 1-1.5M, and sized 1000-1500 sqft.
 
 ### Sorting properties:
 
@@ -430,8 +419,7 @@ _Details coming soon ..._
 | **Edit Property**   | `editProperty INDEX [a/ADDRESS] [pr/PRICE] [s/SIZE] [type/TYPE]`<br> e.g., `editProperty 1 a/123 Clementi Road pr/500000 s/1200 type/HDB`                 |
 | **Remark Property** | `remarkProperty PROPERTY_INDEX  r/REMARKS` <br> e.g., `remarkProperty 2 r/Near Chinese Garden MRT`                                                        |
 | **Filter Client**   | `filterClient [n/NAME_KEYWORDS] [t/TAG_KEYWORDS]`<br> e.g., `filterClient n/James Jake t/friends`                                                         |
-| **Filter Property** | `filterProperty [a/ADDRESS_KEYWORDS] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`<br> e.g., `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500` |
-| **Filter Type**     | `filterType type/TYPE` <br> e.g., `filter type/HDB`                                                                                                       |
+| **Filter Property** | `filterProperty [a/ADDRESS_KEYWORDS] [type/TYPE] [pr/MIN_PRICE MAX_PRICE] [s/MIN_SIZE MAX_SIZE]`<br> e.g., `filterProperty a/Clementi pr/1000000 1500000 s/1000 1500` |
 | **Sort Property**   | `sortProperty st/SORT_TYPE o/ORDER` <br> e.g., `sortProperty st/price o/up`                                                                               |
 | **Delete Client**   | `deleteClient INDEX`<br> e.g., `deleteClient 3`                                                                                                           |
 | **Delete Property** | `deleteProperty INDEX`<br> e.g., `deleteProperty 3`                                                                                                       |
