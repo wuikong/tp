@@ -69,7 +69,7 @@ Adds a client to ClientVault.
 Format: `addClient n/NAME c/CONTACT_NUMBER e/EMAIL [t/TAG]…`
 
 * `NAME` can only be composed of alphanumeric characters, `-` , `'`, `,` or `/`.
-* Clients must have a unique `CONTACT_NUMBER` and `EMAIL`
+* Clients must have a unique `CONTACT_NUMBER` and `EMAIL`.
 
 <box type="tip" seamless>
 
@@ -91,6 +91,8 @@ Adds a property to the client identified by the index number in the displayed cl
 Format: `addProperty i/INDEX a/ADDRESS pr/PRICE s/SIZE type/TYPE`
 
 * `INDEX` refers to the index number shown in the displayed list on the client tab. It must be a positive integer.
+* `ADDRESS` is case insensitive. e.g. ClientVault will recognise `clementi` as `Clementi`.
+* Properties must have a unique address.
 * `TYPE` is case-insensitive. e.g. `condo` will be stored as `Condo` and `hDB` will be stored as `HDB`.
 
 <box type="tip" seamless>
