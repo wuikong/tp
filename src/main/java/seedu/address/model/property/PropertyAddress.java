@@ -9,7 +9,7 @@ import static seedu.address.commons.util.AppUtil.checkArgument;
 public class PropertyAddress {
 
     public static final String MESSAGE_CONSTRAINTS =
-            "Property address should not be blank, should be at most 100 characters long, "
+            "Property address should not be blank, should be at most 100 characters long."
                     + "and should only contain letters, numbers, spaces, and , . # -";
 
     public static final String VALIDATION_REGEX = "[A-Za-z0-9 ,.#\\-]+";
@@ -42,11 +42,15 @@ public class PropertyAddress {
         return value;
     }
 
+    private String normalized() {
+        return value.replaceAll("[\\s,#-]+", "").toLowerCase();
+    }
+
     @Override
     public boolean equals(Object other) {
         return other == this
                 || (other instanceof PropertyAddress
-                && value.equals(((PropertyAddress) other).value));
+                && normalized().equals(((PropertyAddress) other).normalized()));
     }
 
     @Override
